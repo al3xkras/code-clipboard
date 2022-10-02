@@ -15,8 +15,8 @@
     <input type="checkbox" id="language-toggle">
 </div><br/>
 <div>
-    <label for="substring">Substring</label>
-    <input type="text" id="substring" name="substring">
+    <label for="substring">Substring</label><br/>
+    <textarea id="substring" name="substring" rows="5" cols="40"></textarea>
     <input type="checkbox" id="substring-toggle" checked>
 </div>
 
@@ -29,7 +29,7 @@
     <input type="checkbox" id="tags-toggle">
 </div>
 
-<button type="button">Search</button>
+<button type="button" id="search-button">Search</button>
 <script>
     const langToggle=document.getElementById("language-toggle");
     const substringToggle=document.getElementById("substring-toggle");
@@ -56,6 +56,45 @@
     toggleSwitch(langToggle,langSelect);
     toggleSwitch(substringToggle,substringInput);
     toggleSwitch(tagsToggle,tagDelimiterInput,tagsInput);
+
+    document.getElementById("search-button").addEventListener("click", e=>{
+        const l = langToggle.checked;
+        const s = substringToggle.checked;
+        const t = tagsToggle.checked;
+        if (l && !s && !t){
+            alert("Unable to search code by programming language only");
+            return;
+        } else  if (!l && !s && !t){
+            alert("Please choose at least one search option");
+            return;
+        }
+        const data = new FormData();
+        if (l){
+            const lang = langSelect.options[langSelect.selectedIndex].text;
+            data.append("language",lang);
+        }
+        if (s){
+            const substr = substringInput.value;
+            data.append("substring",substr);
+        }
+        if (t){
+            let delim = tagDelimiterInput.value;
+            if (delim.length===0) {
+                delim=";";
+            }
+            console.log(delim)
+            let tags = ""+tagsInput.value;
+            tags=tags.replaceAll(new RegExp(delim,'g'),";");
+            data.append("tags",tags);
+        }
+
+        var object = {};
+        data.forEach(function(value, key){
+            object[key] = value;
+        });
+        var json = JSON.stringify(object);
+        alert(json)
+    });
 </script>
 
 </body>
