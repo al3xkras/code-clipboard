@@ -5,6 +5,49 @@
     <title>Submit</title>
 </head>
 <body>
+<h2>Submit code:</h2>
+<div>
+    <label for="language">Programming language</label>
+    <select id="language" name="language">
+        <option selected>Not specified</option>
+        <option>Java</option>
+    </select>
+</div><br/>
+<div>
+    <label for="code">Code</label><br/>
+    <textarea id="code" name="code" rows="5" cols="40"></textarea>
+</div>
 
+<div>
+    <label for="tags">Tags (separated by space): </label>
+    <input type="text" id="tags" name="tags">
+    <input type="checkbox" id="tags-toggle" checked>
+</div>
+
+<button type="button" id="submit-button">Submit</button>
+
+<script>
+    const tagsToggle=document.getElementById("tags-toggle");
+    const tagsInput=document.getElementById("tags")
+
+    const toggleSwitch = function (inputCheckbox,...elements) {
+        inputCheckbox.addEventListener("click",e=>{
+            if (inputCheckbox.checked){
+                elements.forEach(e=>{
+                    e.disabled=null;
+                });
+            } else {
+                elements.forEach(e=>{
+                    e.disabled=1;
+                });
+            }
+        })
+    }
+    toggleSwitch(tagsToggle,tagsInput);
+
+    document.getElementById("submit-button").addEventListener("click", e=>{
+
+    });
+</script>
 </body>
 </html>
