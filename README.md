@@ -2,7 +2,7 @@
 <h3>Code clipboard</h3>
 <h5>A simple code clipboard that allows user to submit, store and efficiently query code samples.</h5>
 <h5>The clipboard allows user to query code samples by a programming language, a set of tags, assigned to the code, substrings of code samples, and any combination of the above options. This application uses temporary file-stored database to store code samples.</h5>
-<h5>The file-stored database uses <b>GeneralizedSuffixTree</b></h5>(see <a>https://github.com/abahgat/suffixtree</a>)
+<h5>The file-stored database uses <b>GeneralizedSuffixTree</b></h5>(see https://github.com/abahgat/suffixtree)
 
 <h4>Application endpoints:</h4>
 <ul>
