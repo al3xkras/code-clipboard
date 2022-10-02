@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @Builder
-public class Code {
+public class Code implements Serializable {
     private Long id;
     private String codeString;
     private ProgrammingLanguage language;
