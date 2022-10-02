@@ -5,6 +5,58 @@
     <title>Search</title>
 </head>
 <body>
+<h2>Search by:</h2>
+<div>
+    <label for="language">Programming language</label>
+    <select id="language" name="language" disabled>
+        <option selected>Any</option>
+        <option>Java</option>
+    </select>
+    <input type="checkbox" id="language-toggle">
+</div><br/>
+<div>
+    <label for="substring">Substring</label>
+    <input type="text" id="substring" name="substring">
+    <input type="checkbox" id="substring-toggle" checked>
+</div>
+
+<div>
+    <label for="tag-delim">Delimiter</label>
+    <input type="text" id="tag-delim" name="tagDelim" maxlength="1" minlength="1"
+           style="width: 10px" placeholder=";" disabled>
+    <label for="tags">Tags (separated by delimiter): </label>
+    <input type="text" id="tags" name="tags" disabled>
+    <input type="checkbox" id="tags-toggle">
+</div>
+
+<button type="button">Search</button>
+<script>
+    const langToggle=document.getElementById("language-toggle");
+    const substringToggle=document.getElementById("substring-toggle");
+    const tagsToggle=document.getElementById("tags-toggle");
+
+    const langSelect=document.getElementById("language")
+    const substringInput=document.getElementById("substring")
+    const tagDelimiterInput=document.getElementById("tag-delim")
+    const tagsInput=document.getElementById("tags")
+
+    const toggleSwitch = function (inputCheckbox,...elements) {
+        inputCheckbox.addEventListener("click",e=>{
+            if (inputCheckbox.checked){
+                elements.forEach(e=>{
+                    e.disabled=null;
+                });
+            } else {
+                elements.forEach(e=>{
+                    e.disabled=1;
+                });
+            }
+        })
+    }
+    toggleSwitch(langToggle,langSelect);
+    toggleSwitch(substringToggle,substringInput);
+    toggleSwitch(tagsToggle,tagDelimiterInput,tagsInput);
+</script>
 
 </body>
 </html>
