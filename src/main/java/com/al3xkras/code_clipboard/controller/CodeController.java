@@ -2,7 +2,6 @@ package com.al3xkras.code_clipboard.controller;
 
 import com.al3xkras.code_clipboard.entity.Code;
 import com.al3xkras.code_clipboard.model.ProgrammingLanguage;
-import com.al3xkras.code_clipboard.repository.CodeRepository;
 import com.al3xkras.code_clipboard.service.CodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +21,7 @@ import java.util.List;
 public class CodeController {
     @Autowired
     private CodeService codeService;
+
     @PostMapping("/search")
     public ResponseEntity<List<Code>> searchCodeSamples(@RequestParam(name = "language",required = false) String language,
                                                         @RequestParam(name = "substring",required = false)String substring,
@@ -54,5 +55,32 @@ public class CodeController {
             return ResponseEntity.ok(codeService.findAllByTagsAndLanguage(tags, lang));
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/send-code")
+    public ResponseEntity<Code> receiveCodeSample(@RequestParam(name = "language",required = false) String language,
+                                                  @RequestParam(name = "code")String codeString,
+                                                  @RequestParam(name = "tags",required = false) String tagString){
+
+        if (codeString.isEmpty())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"code sample is empty");
+
+
+        ProgrammingLanguage lang=ProgrammingLanguage.NOT_SPECIFIED;
+        try {
+            lang=ProgrammingLanguage.valueOf(language.toUpperCase());
+        }catch (IllegalArgumentException | NullPointerException ignored){}
+        Code code = Code.builder()
+                .codeString(codeString)
+                .language(lang)
+                .build();
+
+        if (tagString!=null){
+            List<String> tags = Arrays.asList(tagString.split(" "));
+            codeService.save(code,tags);
+        } else {
+            codeService.save(code,Collections.emptyList());
+        }
+        return ResponseEntity.ok(code);
     }
 }
