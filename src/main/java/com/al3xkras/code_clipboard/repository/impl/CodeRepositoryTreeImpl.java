@@ -154,7 +154,7 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     @Override
     public List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language) {
         List<String> tagsList = new LinkedList<>(tags);
-        tags.add(language.toString().toLowerCase()+delimiter);
+        tagsList.add(language.toString().toLowerCase()+delimiter);
         return findAllByTags(tagsList);
     }
 

@@ -31,9 +31,14 @@ public class CodeController {
         } else {
             tags=Collections.emptyList();
         }
-        log.info(tagString);
         log.info(tags.toString());
-        if (language==null){
+        ProgrammingLanguage lang=null;
+        try {
+            lang=ProgrammingLanguage.valueOf(language.toUpperCase());
+        }catch (IllegalArgumentException | NullPointerException ignored){}
+        log.info(""+lang);
+
+        if (lang==null){
             if (substring!=null){
                 if (!tags.isEmpty()){
                     return ResponseEntity.badRequest().build();
@@ -46,8 +51,7 @@ public class CodeController {
             return ResponseEntity.badRequest().build();
         }
         if (substring==null && !tags.isEmpty()){
-            return ResponseEntity.ok(codeService.findAllByTagsAndLanguage(tags,
-                    ProgrammingLanguage.valueOf(language.toUpperCase())));
+            return ResponseEntity.ok(codeService.findAllByTagsAndLanguage(tags, lang));
         }
         return ResponseEntity.badRequest().build();
     }
