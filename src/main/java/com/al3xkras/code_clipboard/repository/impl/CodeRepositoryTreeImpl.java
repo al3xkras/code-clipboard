@@ -17,6 +17,8 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.al3xkras.code_clipboard.CodeClipboardApplication.delimiter;
+
 @Slf4j
 @Repository
 public class CodeRepositoryTreeImpl implements CodeRepository {
@@ -25,7 +27,6 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     private String suffixTreePath = storageDir+"tree.bin";
     private String tmpStoragePath = storageDir+"code.bin";
     public static final int DEFAULT_STORAGE_SIZE = (int) 1e6;
-    public static final String delimiter="\u058C";
 
     private GeneralizedSuffixTree suffixTree;
     private HashMap<Integer,Code> temporaryStorage;
