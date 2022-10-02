@@ -5,8 +5,11 @@ import com.al3xkras.code_clipboard.model.ProgrammingLanguage;
 import com.al3xkras.code_clipboard.model.suffixtree.GeneralizedSuffixTree;
 import com.al3xkras.code_clipboard.repository.CodeRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PreDestroy;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,8 +21,9 @@ import java.util.stream.Collectors;
 @Repository
 public class CodeRepositoryTreeImpl implements CodeRepository {
 
-    public static final String suffixTreePath = "./tmp/storage/tree.bin";
-    public static final String tmpStoragePath = "./tmp/storage/code.bin";
+    private String storageDir = "/tmp/storage/";
+    private String suffixTreePath = storageDir+"tree.bin";
+    private String tmpStoragePath = storageDir+"code.bin";
     public static final int DEFAULT_STORAGE_SIZE = (int) 1e6;
     public static final String delimiter="\u058C";
 
@@ -27,12 +31,17 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     private HashMap<Integer,Code> temporaryStorage;
 
     public CodeRepositoryTreeImpl(){
+        String prefix = new FileSystemResource("").getFile().getAbsolutePath().replaceAll("\\\\","/");
+        storageDir=prefix+storageDir;
+        suffixTreePath=prefix+suffixTreePath;
+        tmpStoragePath=prefix+tmpStoragePath;
+        log.info(suffixTreePath);
         load();
     }
 
     protected GeneralizedSuffixTree loadTree() throws IOException, ClassNotFoundException {
         GeneralizedSuffixTree suffixTree;
-        Path p = Paths.get(CodeRepositoryTreeImpl.suffixTreePath);
+        Path p = Paths.get(suffixTreePath);
         try {
             ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(p));
             suffixTree = (GeneralizedSuffixTree) ois.readObject();
@@ -45,7 +54,7 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     }
     protected HashMap<Integer,Code> loadCode() throws IOException, ClassNotFoundException {
         HashMap<Integer,Code> storage;
-        Path p = Paths.get(CodeRepositoryTreeImpl.tmpStoragePath);
+        Path p = Paths.get(tmpStoragePath);
         try {
             ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(p));
             storage = (HashMap<Integer,Code>) ois.readObject();
@@ -59,9 +68,12 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
 
     @Override
     public void serialize() throws IOException {
+        new File(storageDir).mkdirs();
+        new File(suffixTreePath).createNewFile();
         ObjectOutputStream tree = new ObjectOutputStream(Files.newOutputStream(Paths.get(suffixTreePath)));
         tree.writeObject(suffixTree);
         tree.close();
+        new File(tmpStoragePath).createNewFile();
         ObjectOutputStream storage = new ObjectOutputStream(Files.newOutputStream(Paths.get(tmpStoragePath)));
         storage.writeObject(temporaryStorage);
         storage.close();
@@ -150,5 +162,10 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
         if (substring.contains(delimiter))
             throw new IllegalArgumentException("invalid query string: \""+substring+'\"');
         return findAllByTags(Collections.singletonList(substring));
+    }
+
+    @PreDestroy
+    void preDestroy() throws IOException {
+        serialize();
     }
 }
