@@ -62,7 +62,8 @@ document.getElementById("search-button").addEventListener("click", e=>{
         console.log(xhr.status);
         if (xhr.status===200){
             let jsonResponse = JSON.parse(xhr.responseText);
-            console.log(xhr.responseText);
+            codeSamples=jsonResponse;
+            processCodeSamples()
         } else {
             alert(xhr.status)
         }

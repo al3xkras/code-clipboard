@@ -29,8 +29,39 @@
     <input type="text" id="tags" name="tags" disabled>
     <input type="checkbox" id="tags-toggle">
 </div>
+<div id="code-sample" hidden>
+    <label for="code-area">Code</label><br/>
+    <textarea id="code-area" name="codeArea" rows="5" cols="40"></textarea>
+</div>
+<div id="code-samples">
+
+</div>
 
 <button type="button" id="search-button">Search</button>
+<script>
+    let codeSamples;
+    const codeView=document.getElementById("code-samples");
+    function clearCodeTemplates(){
+        codeView.innerHTML='';
+    }
+    const processCodeSamples=function () {
+        clearCodeTemplates();
+        let i=1;
+        codeSamples.forEach(sample=>{
+            let template = document.querySelector('#code-sample').cloneNode(true);
+            let codeArea = template.querySelectorAll('[name="codeArea"]')[0];
+            template.setAttribute("id","sample"+i);
+            i++;
+            console.log(template)
+            console.log(codeArea)
+            codeArea.innerHTML=sample.codeString;
+            template.hidden=null;
+            codeView.appendChild(template);
+        });
+    }
+
+</script>
 <script type="text/javascript" th:src="@{/js/search.js}"></script>
+
 </body>
 </html>
