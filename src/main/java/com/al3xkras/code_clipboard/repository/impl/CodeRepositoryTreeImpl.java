@@ -15,14 +15,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.al3xkras.code_clipboard.CodeClipboardApplication.delimiter;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Slf4j
 @Repository
 public class CodeRepositoryTreeImpl implements CodeRepository {
 
     private String storageDir = "/tmp/storage/";
+    private String storageBackupDir="/tmp/storage/bak";
     private String suffixTreePath = storageDir+"tree.bin";
     private String tmpStoragePath = storageDir+"code.bin";
     public static final int DEFAULT_STORAGE_SIZE = (int) 1e6;
@@ -33,10 +36,20 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     public CodeRepositoryTreeImpl(){
         String prefix = new FileSystemResource("").getFile().getAbsolutePath().replaceAll("\\\\","/");
         storageDir=prefix+storageDir;
+        storageBackupDir=prefix+storageBackupDir;
         suffixTreePath=prefix+suffixTreePath;
         tmpStoragePath=prefix+tmpStoragePath;
         log.info(suffixTreePath);
-        load();
+        try {
+            load();
+        } catch (RuntimeException r){
+            try {
+                copyFolder(Paths.get(storageBackupDir),Paths.get(storageDir));
+            } catch (IOException e){
+                throw new RuntimeException(e);
+            }
+            load();
+        }
     }
 
     protected GeneralizedSuffixTree loadTree() throws IOException, ClassNotFoundException {
@@ -69,6 +82,8 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     @Override
     public void serialize() throws IOException {
         new File(storageDir).mkdirs();
+        new File(storageBackupDir).mkdirs();
+        copyFolder(Paths.get(storageDir),Paths.get(storageBackupDir));
         new File(suffixTreePath).createNewFile();
         ObjectOutputStream tree = new ObjectOutputStream(Files.newOutputStream(Paths.get(suffixTreePath)));
         tree.writeObject(suffixTree);
@@ -77,6 +92,23 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
         ObjectOutputStream storage = new ObjectOutputStream(Files.newOutputStream(Paths.get(tmpStoragePath)));
         storage.writeObject(temporaryStorage);
         storage.close();
+    }
+
+    private static  void copyFolder(Path src, Path dest) throws IOException {
+        try (Stream<Path> stream = Files.walk(src)) {
+            stream.forEach(source -> {
+                if (source.toFile().isFile()) {
+                    copy(source, dest.resolve(src.relativize(source)));
+                }
+            });
+        }
+    }
+    private static void copy(Path source, Path dest) {
+        try {
+            Files.copy(source, dest, REPLACE_EXISTING);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     @Override
