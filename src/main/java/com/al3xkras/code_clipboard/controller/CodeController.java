@@ -63,6 +63,8 @@ public class CodeController {
         }
         if (substring==null && !tags.isEmpty()){
             return ResponseEntity.ok(codeService.findAllByTagsAndLanguage(tags, lang));
+        } else if (substring!=null){
+            return ResponseEntity.ok(codeService.findAllByLanguageAndSubstring(lang,substring));
         }
         return ResponseEntity.badRequest().build();
     }

@@ -35,4 +35,7 @@ public class CodeService {
     public List<Code> findAllBySubstring(String substring){
         return codeRepository.findAllBySubstring(substring);
     }
+    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language,String substring){
+        return codeRepository.findAllByLanguageAndSubstring(language,substring);
+    }
 }

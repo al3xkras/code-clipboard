@@ -81,6 +81,11 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     }
 
     @Override
+    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring) {
+        return findAllByTagsAndLanguage(Collections.singletonList(substring),language);
+    }
+
+    @Override
     public void load() {
         try {
             this.temporaryStorage=loadCode();

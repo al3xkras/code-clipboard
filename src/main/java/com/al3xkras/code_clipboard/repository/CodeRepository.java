@@ -18,4 +18,5 @@ public interface CodeRepository {
     List<Code> findAllBySubstring(String substring);
     default void load(){};
     default void serialize() throws IOException{};
+    List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring);
 }
