@@ -4,34 +4,50 @@
     <meta charset="UTF-8">
     <title>Search</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
-        div.code-samples{
+        body{
+            margin-left: 3px;
             background: black;
         }
+        label{
+            font-size: 14px;
+        }
+        *{
+            color: white;
+            background: black;
+        }
+        div.code-samples{
+        }
         div.code-sample {
-            margin: 5px;
+            margin: 5px 5px 15px;
+            border-bottom: 2px solid black;
         }
         div.search-form {
             margin: 5px;
             border-right: 1px solid black;
         }
         .btn-copy{
+            margin-left: 10px;
             padding: 0;
             width: 25px;
             height: 25px;
         }
+        input.tags-input{
+            font-size: 14px;
+            height: 16px;
+        }
     </style>
 </head>
 <body>
-<a href="/">Main</a>
+<a id="main-page-ref" href="/">Main</a>
 <h2>Search by:</h2>
 <div hidden>
-    <div id="code-sample" class="code-sample" hidden>
+    <div id="code-sample" class="code-sample d-flex flex-row" hidden>
         <label for="code-area"></label><br/>
-        <pre id="code-area" name="codeArea" style="background: gray"></pre>
+        <pre id="code-area" name="codeArea" style="background: black; color: #8d4bff"></pre>
         <button class="btn btn-copy" id="btn-copy" onclick="codeCopy(this)">
-            <img class="btn-copy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABcCAMAAADUMSJqAAAAOVBMVEUAAAD///+/v7+Tk5Pj4+P4+Ph3d3esrKzn5+fS0tLc3Nz7+/uQkJBra2txcXG2trakpKSKioqdnZ1GHVxaAAAAtElEQVRoge3YyxKCMAxG4RaslosCvv/DunNEmqL0Zxycc9bJt8oqzj+r3LfVPp8DBwcHB1fh/Wb8el7rNmzG48rmB9n4CfxHeBesunJ8Mo98LMdrE78cHG+aPXHX7olndAFu6wrc1CW4pWtwQxfhaV2FJ3UZntJ1eEIX4ktdiS90Kf6ul+Jx6l8LUjwb+JHwe0wXFLhVBQ4ODg4ODi7Eh/lQK8X9/OXhtXgqcHBwcHBw8H/DH0CVFg1/PrfAAAAAAElFTkSuQmCC" alt=""/>
-        </button>
+            <img class="btn-copy" th:src="@{svg/clipboard.svg}" alt=""/></button>
     </div>
 </div>
 
@@ -56,11 +72,11 @@
             <input type="text" id="tag-delim" name="tagDelim" maxlength="1" minlength="1"
                    style="width: 10px" placeholder=";" disabled hidden>
             <label for="tags">Tags (separated by space): </label>
-            <input type="text" id="tags" name="tags" disabled>
+            <input type="text" id="tags" name="tags" class="tags-input" disabled>
             <input type="checkbox" id="tags-toggle">
-        </div>
+        </div><br/>
 
-        <button type="button" id="search-button">Search</button>
+        <button class="btn btn-outline-success" type="submit" id="search-button">Search</button>
     </div>
 
     <div class="code-samples d-flex flex-column" id="code-samples" ></div>
@@ -71,6 +87,42 @@
 
 
 <script>
+    $(document).ready(function() {
+        var ctrlDown = false,
+            ctrlKey = 17,
+            cmdKey = 91,
+            zKey = 90;
+
+        let homeRef=document.getElementById("main-page-ref");
+        let ctrlParam=false;
+
+        $(document).keydown(function (e) {
+            if (e.keyCode === ctrlKey || e.keyCode === cmdKey) ctrlDown = true;
+        }).keyup(function (e) {
+            if (e.keyCode === ctrlKey || e.keyCode === cmdKey) {
+                ctrlDown = false;
+                ctrlParam=false;
+            }
+        });
+
+        let url = new URL(document.URL);
+        if (url.searchParams.get("ctrl")){
+            ctrlParam=true;
+        }
+
+        $(document).keydown(function (e) {
+            if ((ctrlParam || ctrlDown) && (e.keyCode === zKey)) {
+                ctrlParam=false
+
+                let url1=new URL(homeRef.href);
+                url1.searchParams.append('ctrl', 1);
+                homeRef.href=url1.toString();
+                homeRef.click();
+            }
+        });
+    });
+
+
     function copy(text) {
         const input = document.createElement('textarea');
         input.innerHTML = text;
@@ -81,7 +133,7 @@
         return result;
     }
     function codeCopy(node) {
-        copy(node.parentNode.querySelectorAll('[name="codeArea\"]')[0].innerHTML)
+        copy(node.parentNode.querySelectorAll('[name="codeArea"]')[0].innerHTML)
     }
 </script>
 <script>
@@ -99,7 +151,7 @@
             template.setAttribute("id","sample"+i);
             i++;
             if (i%2===0){
-                codeArea.style.background="lightgray"
+                codeArea.style.color="cyan"
             }
             console.log(template)
             console.log(codeArea)
