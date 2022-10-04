@@ -11,15 +11,18 @@
 <a id="main-page-ref" href="/">Main</a>
 <h2>Search by:</h2>
 <div hidden>
-    <div id="code-sample" class="code-sample d-flex flex-row" hidden>
+    <div id="code-sample" class="code-sample d-flex flex-column" hidden>
         <label for="code-area"></label><br/>
-        <pre id="code-area" name="codeArea" style="background: black; color: #8d4bff"></pre>
-        <button class="btn btn-outline-primary btn-copy" id="btn-copy" onclick="codeCopy(this)">
-            <img class="btn-copy" th:src="@{svg/clipboard.svg}" alt=""/>
-        </button>
-        <button class="btn btn-outline-danger btn-copy" onclick="codeDelete(this)">
-            <img class="btn-copy" th:src="@{svg/trash.svg}" alt=""/>
-        </button>
+        <textarea class="hide-scrollbars" id="code-area" name="codeArea" style="background: black; color: #8d4bff; width: 800px; height: 300px; resize: none; overflow:auto"></textarea>
+        <div class="d-flex flex-row-reverse" style="margin: 5px 5px 10px;">
+            <button class="btn btn-outline-danger btn-copy" onclick="codeDelete(this)">
+                <img class="btn-copy" th:src="@{svg/trash.svg}" alt=""/>
+            </button>
+            <button class="btn btn-outline-primary btn-copy" id="btn-copy" onclick="codeCopy(this)">
+                <img class="btn-copy" th:src="@{svg/clipboard.svg}" alt=""/>
+            </button>
+        </div>
+
     </div>
 </div>
 
@@ -50,7 +53,7 @@
         <button class="btn btn-outline-success" type="submit" id="search-button">Search</button>
     </div>
 
-    <div class="code-samples d-flex flex-column" id="code-samples" ></div>
+    <div class="code-samples d-flex flex-column flex-nowrap" id="code-samples" ></div>
 </div>
 
 <script type="text/javascript" th:src="@{/js/code_delete.js}"></script>

@@ -5,7 +5,7 @@ function deleteEntity(node,id) {
         console.log(xhr.status);
         if (xhr.status===200){
             alert("code deleted successfully")
-            node.parentNode.remove();
+            node.parentNode.parentNode.remove();
         } else {
             alert(xhr.status)
         }
@@ -13,6 +13,6 @@ function deleteEntity(node,id) {
     xhr.send();
 }
 function codeDelete(node) {
-    console.log(node.parentNode.getAttribute("entity-id"))
-    deleteEntity(node,node.parentNode.getAttribute("entity-id"));
+    console.log(node.parentNode.parentNode.getAttribute("entity-id"))
+    deleteEntity(node,node.parentNode.parentNode.getAttribute("entity-id"));
 }

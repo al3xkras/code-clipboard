@@ -8,5 +8,6 @@ function copy(text) {
     return result;
 }
 function codeCopy(node) {
-    copy(node.parentNode.querySelectorAll('[name="codeArea"]')[0].innerHTML)
+    copy(node.parentNode.parentNode.querySelectorAll('[name="codeArea"]')[0].innerHTML)
+    alert("code copied to clipboard")
 }
