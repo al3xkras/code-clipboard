@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Submit</title>
@@ -13,8 +13,7 @@
 <div>
     <label for="language">Programming language</label>
     <select id="language" name="language">
-        <option selected>Not specified</option>
-        <option>Java</option>
+        <option th:each="language:${languages}" th:name="${language.name()}" th:text="${language.prettyName}"></option>
     </select>
 </div><br/>
 <div>

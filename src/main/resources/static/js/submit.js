@@ -23,7 +23,8 @@ document.getElementById("submit-button").addEventListener("click", e=>{
     const t = tagsToggle.checked;
     const data = new FormData();
     if (langSelect.selectedIndex>0){
-        const lang = langSelect.options[langSelect.selectedIndex].text;
+        const lang = langSelect.options[langSelect.selectedIndex].getAttribute("name");
+        console.log(lang)
         data.append("language",lang);
     }
     const code = codeInput.value;
@@ -40,7 +41,6 @@ document.getElementById("submit-button").addEventListener("click", e=>{
     xhr.onload = function () {
         console.log(xhr.status);
         if (xhr.status===200){
-            console.log(xhr.responseText);
             alert("submitted successfully")
             tagsInput.value="";
             codeInput.value="";

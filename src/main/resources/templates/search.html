@@ -25,8 +25,7 @@
         <div>
             <label for="language">Programming language</label>
             <select id="language" name="language" disabled>
-                <option selected>Any</option>
-                <option>Java</option>
+                <option th:each="language:${languages}" th:name="${language.name()}" th:text="${language.prettyName}"></option>
             </select>
             <input type="checkbox" id="language-toggle">
         </div><br/>
@@ -50,6 +49,11 @@
     <div class="code-samples d-flex flex-column" id="code-samples" ></div>
 </div>
 
+<script>
+    $(window).on('load',()=>{
+        var attribute='${name}'
+    })
+</script>
 <script type="text/javascript" th:src="@{/js/code_copy.js}"></script>
 <script type="text/javascript" th:src="@{/js/search_hotkeys.js}"></script>
 <script type="text/javascript" th:src="@{/js/search_process_code_samples.js}"></script>

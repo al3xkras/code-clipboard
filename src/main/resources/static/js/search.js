@@ -37,7 +37,8 @@ document.getElementById("search-button").addEventListener("click", e=>{
     }
     const data = new FormData();
     if (l){
-        const lang = langSelect.options[langSelect.selectedIndex].text;
+        const lang = langSelect.options[langSelect.selectedIndex].getAttribute("name");
+        console.log(lang)
         data.append("language",lang);
     }
     if (s){
@@ -61,8 +62,7 @@ document.getElementById("search-button").addEventListener("click", e=>{
     xhr.onload = function () {
         console.log(xhr.status);
         if (xhr.status===200){
-            let jsonResponse = JSON.parse(xhr.responseText);
-            codeSamples=jsonResponse;
+            codeSamples=JSON.parse(xhr.responseText);
             processCodeSamples()
         } else {
             alert(xhr.status)
