@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -32,6 +33,13 @@ public class CodeController {
         } else {
             tags=Collections.emptyList();
         }
+
+        if (substring!=null)
+            substring=substring.toLowerCase();
+        tags=tags.stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+
         log.info(tags.toString());
         ProgrammingLanguage lang=null;
         try {
