@@ -14,4 +14,4 @@
 </ul>
 </div>
 
-https://user-images.githubusercontent.com/62184786/193868678-23d5d57c-3f93-403f-a0c4-da08d3444a0d.mp4
+<video src="https://user-images.githubusercontent.com/62184786/193868678-23d5d57c-3f93-403f-a0c4-da08d3444a0d.mp4" controls="false" autoplay="autoplay"></video>
