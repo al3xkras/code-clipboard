@@ -13,9 +13,27 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>code-clipboard</name>
 	<description>Code clipboard</description>
-	<properties>
-		<java.version>1.8</java.version>
-	</properties>
+
+	<packaging>jar</packaging>
+
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>mavenLocal</id>
+			<name>Messenger Releases</name>
+			<url>file:"C:\Users\alexkras\Desktop\MavenLocal"</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>mavenLocal</id>
+			<url>file:"C:\Users\alexkras\Desktop\MavenLocal"</url>
+		</repository>
+	</repositories>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -57,7 +75,24 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.15</version>
+				<configuration>
+					<argLine>-Dfile.encoding=UTF-8</argLine>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
+	<properties>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<file.encoding>UTF-8</file.encoding>
+	</properties>
 
 </project>
