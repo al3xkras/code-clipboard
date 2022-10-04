@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -19,7 +20,7 @@ public class PagesController {
 
     @GetMapping("/search")
     public String codeSearchPage(Model model){
-        model.addAttribute("languages", Arrays.asList(ProgrammingLanguage.values()));
+        model.addAttribute("languages", Arrays.stream(ProgrammingLanguage.values()).skip(1).collect(Collectors.toList()));
         return "search";
     }
 

@@ -114,14 +114,16 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     @Override
     public Code save(Code code, List<String> tags) {
         List<String> l = new LinkedList<>();
-        l.add(code.getLanguage().toString().toLowerCase());
+        if (!code.getLanguage().equals(ProgrammingLanguage.NOT_SPECIFIED))
+            l.add(code.getLanguage().toString().toLowerCase());
         tags.forEach(t->l.add(t.toLowerCase()));
-        l.add(code.toString().toLowerCase());
+        l.add(code.getCodeString().toLowerCase());
 
         String codeString = String.join(delimiter,l);
         int index = temporaryStorage.size();
         code.setCodeId((long)index);
         temporaryStorage.put(index,code);
+        log.info(codeString);
         suffixTree.put(codeString,index);
         return code;
     }
