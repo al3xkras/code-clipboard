@@ -9,7 +9,8 @@ const processCodeSamples=function () {
     codeSamples.forEach(sample=>{
         let template = document.querySelector('#code-sample').cloneNode(true);
         let codeArea = template.querySelectorAll('[name="codeArea"]')[0];
-        template.setAttribute("id","sample"+i);
+        template.setAttribute("id","sample"+sample.codeId);
+        template.setAttribute("entity-id",""+sample.codeId);
         i++;
         if (i%2===0){
             codeArea.style.color="cyan"

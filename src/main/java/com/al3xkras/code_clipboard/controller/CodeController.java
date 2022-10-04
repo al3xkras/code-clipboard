@@ -44,6 +44,8 @@ public class CodeController {
         ProgrammingLanguage lang=null;
         try {
             lang=ProgrammingLanguage.valueOf(language.toUpperCase());
+            if (lang.equals(ProgrammingLanguage.NOT_SPECIFIED))
+                lang=null;
         }catch (IllegalArgumentException | NullPointerException ignored){
             log.info(language);
         }

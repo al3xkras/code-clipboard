@@ -5,7 +5,6 @@ import com.al3xkras.code_clipboard.model.ProgrammingLanguage;
 import com.al3xkras.code_clipboard.model.suffixtree.GeneralizedSuffixTree;
 import com.al3xkras.code_clipboard.repository.CodeRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 
@@ -121,7 +120,7 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
 
         String codeString = String.join(delimiter,l);
         int index = temporaryStorage.size();
-        code.setId((long)index);
+        code.setCodeId((long)index);
         temporaryStorage.put(index,code);
         suffixTree.put(codeString,index);
         return code;

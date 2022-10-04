@@ -25,6 +25,12 @@ div.search-form {
     width: 25px;
     height: 25px;
 }
+img.btn-copy{
+    background: transparent;
+    padding: 7px;
+    margin-left: -6%;
+    margin-top: -5px;
+}
 input.tags-input{
     font-size: 14px;
     height: 16px;

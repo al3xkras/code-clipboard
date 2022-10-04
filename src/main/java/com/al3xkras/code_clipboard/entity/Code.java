@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class Code implements Serializable {
-    private Long id;
+    private Long codeId;
     private String codeString;
     private ProgrammingLanguage language;
 }
