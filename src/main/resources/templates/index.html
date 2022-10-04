@@ -1,77 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Code clipboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <style>
-        *{
-            color: white;
-            background: black;
-        }
-        body{
-            margin-left: 10px;
-            background: black;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
 </head>
 <body>
-<script>
-    $(document).ready(function() {
-        var ctrlDown = false,
-            ctrlKey = 17,
-            cmdKey = 91,
-            vKey = 86,
-            cKey = 67;
 
-        const searchRef=document.getElementById("search-ref");
-        const submitRef=document.getElementById("submit-ref");
-
-
-        let ctrlParam=false;
-
-        $(document).keydown(function(e) {
-            if (e.keyCode === ctrlKey || e.keyCode === cmdKey) ctrlDown = true;
-        }).keyup(function(e) {
-            if (e.keyCode === ctrlKey || e.keyCode === cmdKey) {
-                ctrlDown = false;
-                ctrlParam=false;
-            }
-        });
-
-        let url = new URL(document.URL);
-        if (url.searchParams.get("ctrl")){
-            ctrlParam=true;
-        }
-
-        $(".no-copy-paste").keydown(function(e) {
-            if (ctrlDown && (e.keyCode === vKey || e.keyCode === cKey)) return false;
-        });
-
-        // Document Ctrl + C/V
-        $(document).keydown(function(e) {
-            if ((ctrlParam || ctrlDown) && (e.keyCode === cKey)) {
-                ctrlParam=false
-                let url1=new URL(searchRef.href);
-                url1.searchParams.append('ctrl', 1);
-                searchRef.href=url1.toString();
-                searchRef.click();
-            }
-            if ((ctrlParam || ctrlDown) && (e.keyCode === vKey)) {
-                ctrlParam=false
-                let url1=new URL(submitRef.href);
-                url1.searchParams.append('ctrl', 1);
-                submitRef.href=url1.toString();
-                submitRef.click();
-            }
-        });
-    });
-</script>
 <div style="margin-top: 16px">
     <a id="search-ref" href="/search">Search</a><br/><br/>
     <a id="submit-ref" href="/submit">Submit</a><br/>
 </div>
+
+<script type="text/javascript" th:src="@{/js/index.js}"></script>
 
 </body>
 </html>

@@ -1,0 +1,31 @@
+body{
+    margin-left: 3px;
+    background: black;
+}
+label{
+    font-size: 14px;
+}
+*{
+    color: white;
+    background: black;
+}
+div.code-samples{
+}
+div.code-sample {
+    margin: 5px 5px 15px;
+    border-bottom: 2px solid black;
+}
+div.search-form {
+    margin: 5px;
+    border-right: 1px solid black;
+}
+.btn-copy{
+    margin-left: 10px;
+    padding: 0;
+    width: 25px;
+    height: 25px;
+}
+input.tags-input{
+    font-size: 14px;
+    height: 16px;
+}
