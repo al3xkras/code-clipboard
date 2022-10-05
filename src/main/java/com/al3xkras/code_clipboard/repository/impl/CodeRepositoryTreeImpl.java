@@ -49,9 +49,11 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
         } catch (RuntimeException r){
             try {
                 restore();
+                load();
             } catch (IOException e){
                 try {
                     clearStorage();
+                    load();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -90,7 +92,12 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     public void serialize() throws IOException {
         new File(storageDir).mkdirs();
         new File(storageBackupDir).mkdirs();
-        backup();
+        boolean filesExist=true;
+        try {
+            backup();
+        } catch (IOException e){
+            filesExist=false;
+        }
         new File(suffixTreePath).createNewFile();
         ObjectOutputStream tree = new ObjectOutputStream(Files.newOutputStream(Paths.get(suffixTreePath)));
         tree.writeObject(suffixTree);
@@ -99,6 +106,8 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
         ObjectOutputStream storage = new ObjectOutputStream(Files.newOutputStream(Paths.get(tmpStoragePath)));
         storage.writeObject(temporaryStorage);
         storage.close();
+        if (!filesExist)
+            backup();
     }
 
     private void backup() throws IOException {
@@ -106,13 +115,15 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
             Files.copy(Paths.get(tmpStoragePath),Paths.get(tmpStorageBak),REPLACE_EXISTING);
             Files.copy(Paths.get(suffixTreePath),Paths.get(suffixTreeBak),REPLACE_EXISTING);
         } catch (IOException e){
-            clearBackup();
+            try {
+                clearBackup();
+            } catch (IOException ignored){}
             throw new IOException("failed to create backup");
         }
     }
     private void restore() throws IOException {
-        Files.copy(Paths.get(tmpStoragePath),Paths.get(tmpStorageBak),REPLACE_EXISTING);
-        Files.copy(Paths.get(suffixTreePath),Paths.get(suffixTreeBak),REPLACE_EXISTING);
+        Files.copy(Paths.get(tmpStorageBak),Paths.get(tmpStoragePath),REPLACE_EXISTING);
+        Files.copy(Paths.get(suffixTreeBak),Paths.get(suffixTreePath),REPLACE_EXISTING);
     }
     private void clearBackup() throws IOException {
         if (!new File(tmpStorageBak).delete()){
@@ -142,6 +153,9 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
             this.temporaryStorage=loadCode();
         } catch (IOException e) {
             this.temporaryStorage=new HashMap<>(DEFAULT_STORAGE_SIZE);
+            if (e instanceof StreamCorruptedException){
+                throw new RuntimeException(e);
+            }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -157,6 +171,9 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
             temporaryStorage=new HashMap<>(DEFAULT_STORAGE_SIZE);
             for (Code code: storage.values()){
                 save(code,Collections.emptyList());
+            }
+            if (e instanceof StreamCorruptedException){
+                throw new RuntimeException(e);
             }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
