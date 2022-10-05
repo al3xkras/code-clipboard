@@ -25,7 +25,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class CodeRepositoryTreeImpl implements CodeRepository {
 
     private String storageDir = "/tmp/storage/";
-    private String storageBackupDir="/tmp/storage/bak";
+    private String storageBackupDir="/tmp/bak/storage";
     private String suffixTreePath = storageDir+"tree.bin";
     private String tmpStoragePath = storageDir+"code.bin";
     public static final int DEFAULT_STORAGE_SIZE = (int) 1e6;

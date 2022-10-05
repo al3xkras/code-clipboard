@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.al3xkras</groupId>
 	<artifactId>code-clipboard</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>code-clipboard</name>
 	<description>Code clipboard</description>
 
