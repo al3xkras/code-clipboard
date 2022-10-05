@@ -25,9 +25,11 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class CodeRepositoryTreeImpl implements CodeRepository {
 
     private String storageDir = "/tmp/storage/";
-    private String storageBackupDir="/tmp/bak/storage";
+    private String storageBackupDir="/tmp/bak/storage/";
     private String suffixTreePath = storageDir+"tree.bin";
     private String tmpStoragePath = storageDir+"code.bin";
+    private String suffixTreeBak = storageBackupDir+"tree.bin";
+    private String tmpStorageBak = storageBackupDir+"code.bin";
     public static final int DEFAULT_STORAGE_SIZE = (int) 1e6;
 
     private GeneralizedSuffixTree suffixTree;
@@ -39,16 +41,21 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
         storageBackupDir=prefix+storageBackupDir;
         suffixTreePath=prefix+suffixTreePath;
         tmpStoragePath=prefix+tmpStoragePath;
+        suffixTreeBak=prefix+suffixTreeBak;
+        tmpStorageBak=prefix+tmpStorageBak;
         log.info(suffixTreePath);
         try {
             load();
         } catch (RuntimeException r){
             try {
-                copyFolder(Paths.get(storageBackupDir),Paths.get(storageDir));
+                restore();
             } catch (IOException e){
-                throw new RuntimeException(e);
+                try {
+                    clearStorage();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
-            load();
         }
     }
 
@@ -83,7 +90,7 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     public void serialize() throws IOException {
         new File(storageDir).mkdirs();
         new File(storageBackupDir).mkdirs();
-        copyFolder(Paths.get(storageDir),Paths.get(storageBackupDir));
+        backup();
         new File(suffixTreePath).createNewFile();
         ObjectOutputStream tree = new ObjectOutputStream(Files.newOutputStream(Paths.get(suffixTreePath)));
         tree.writeObject(suffixTree);
@@ -94,20 +101,33 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
         storage.close();
     }
 
-    private static  void copyFolder(Path src, Path dest) throws IOException {
-        try (Stream<Path> stream = Files.walk(src)) {
-            stream.forEach(source -> {
-                if (source.toFile().isFile()) {
-                    copy(source, dest.resolve(src.relativize(source)));
-                }
-            });
+    private void backup() throws IOException {
+        try{
+            Files.copy(Paths.get(tmpStoragePath),Paths.get(tmpStorageBak),REPLACE_EXISTING);
+            Files.copy(Paths.get(suffixTreePath),Paths.get(suffixTreeBak),REPLACE_EXISTING);
+        } catch (IOException e){
+            clearBackup();
+            throw new IOException("failed to create backup");
         }
     }
-    private static void copy(Path source, Path dest) {
-        try {
-            Files.copy(source, dest, REPLACE_EXISTING);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
+    private void restore() throws IOException {
+        Files.copy(Paths.get(tmpStoragePath),Paths.get(tmpStorageBak),REPLACE_EXISTING);
+        Files.copy(Paths.get(suffixTreePath),Paths.get(suffixTreeBak),REPLACE_EXISTING);
+    }
+    private void clearBackup() throws IOException {
+        if (!new File(tmpStorageBak).delete()){
+            throw new IOException("failed to delete backup file: "+tmpStorageBak);
+        }
+        if (!new File(suffixTreeBak).delete()){
+            throw new IOException("failed to delete backup file: "+suffixTreeBak);
+        }
+    }
+    private void clearStorage() throws IOException {
+        if (!new File(tmpStoragePath).delete()){
+            throw new IOException("failed to clear storage: "+tmpStorageBak);
+        }
+        if (!new File(suffixTreePath).delete()){
+            throw new IOException("failed to clear storage: "+suffixTreeBak);
         }
     }
 
