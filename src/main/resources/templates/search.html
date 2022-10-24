@@ -13,7 +13,7 @@
 <div hidden>
     <div id="code-sample" class="code-sample d-flex flex-column" hidden>
         <label for="code-area"></label><br/>
-        <textarea class="hide-scrollbars" id="code-area" name="codeArea" style="background: black; color: #8d4bff; width: 800px; height: 300px; resize: none; overflow:auto"></textarea>
+        <textarea class="hide-scrollbars" id="code-area" name="codeArea" style="background: black; color: #8d4bff; width: 800px; height: 300px; " oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
         <div class="d-flex flex-row-reverse" style="margin: 5px 5px 10px;">
             <button class="btn btn-outline-danger btn-copy" onclick="codeDelete(this)">
                 <img class="btn-copy" th:src="@{svg/trash.svg}" alt=""/>

@@ -15,10 +15,16 @@ const processCodeSamples=function () {
         if (i%2===0){
             codeArea.style.color="cyan"
         }
-        console.log(template)
-        console.log(codeArea)
-        codeArea.innerHTML=sample.codeString;
-        template.hidden=null;
         codeView.appendChild(template);
+        template.hidden=null;
+
+        codeArea.innerHTML=sample.codeString;
+        const maxHeight=250
+        codeArea.style.height = ""
+        if (codeArea.scrollHeight<=maxHeight){
+            codeArea.style.height = codeArea.scrollHeight+"px"
+        } else {
+            codeArea.style.height = maxHeight+"px"
+        }
     });
 }
