@@ -40,7 +40,7 @@
             <label for="substring">Substring</label><br/>
             <textarea id="substring" name="substring" rows="5" cols="40"></textarea>
             <input type="checkbox" id="substring-toggle" checked>
-        </div>
+        </div><br/>
         <div>
             <label for="tag-delim" hidden>Delimiter</label>
             <input type="text" id="tag-delim" name="tagDelim" maxlength="1" minlength="1"
@@ -50,12 +50,16 @@
             <input type="checkbox" id="tags-toggle">
         </div><br/>
 
-        <button class="btn btn-outline-success" type="submit" id="search-button">Search</button>
+        <button class="btn btn-outline-success" type="submit" id="search-button" style="height: 250px; position: absolute">Search</button>
     </div>
 
     <div class="code-samples d-flex flex-column flex-nowrap" id="code-samples" ></div>
 </div>
-
+<script>
+    const searchButton = document.getElementById("search-button")
+    searchButton.style.width="";
+    searchButton.style.width=searchButton.parentNode.offsetWidth+"px"
+</script>
 <script type="text/javascript" th:src="@{/js/code_delete.js}"></script>
 <script type="text/javascript" th:src="@{/js/code_copy.js}"></script>
 <script type="text/javascript" th:src="@{/js/search_hotkeys.js}"></script>
