@@ -6,7 +6,10 @@ import com.al3xkras.code_clipboard.repository.CodeRepository;
 import com.al3xkras.code_clipboard.repository.CodeRepositoryHibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
@@ -25,8 +28,21 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
     private CodeRepositoryHibernate codeRepositoryHibernate;
 
     public static List<String> validateTags(Collection<String> tags){
-        return tags.stream().filter(t -> t.matches("^[a-zA-Z0-9 ]*$") && !t.isBlank())
+        return tags.stream().filter(t -> t.matches("^[a-zA-Z0-9 _]*$") && !t.isBlank())
                 .map(x -> x.replaceAll(" ", "_")).toList();
+    }
+
+    public static List<String> parseTags(Collection<String> tags){
+        return validateTags(tags).stream().map(x->"+*"+x+"*")
+                .collect(Collectors.toList());
+    }
+
+    public static String parseSearchString(String string){
+        String words = codeToSearchString(string);
+        if (words.isBlank()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        return Arrays.stream(words.split(" ")).map(x->"*"+x+"*").collect(Collectors.joining(" "));
     }
 
     public static String codeToSearchString(String code){
@@ -76,42 +92,39 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
 
     @Override
     @Transactional
-    public List<Code> findAllByTags(Collection<String> tags) {
-        List<String> validTags = validateTags(tags).stream().map(x->"+"+x)
-                .collect(Collectors.toList());
+    public List<Code> findAllByTags(Collection<String> tags, Pageable pageable) {
+        List<String> validTags = parseTags(tags);
         if (validTags.isEmpty()){
             return Collections.emptyList();
         }
-        return codeRepositoryHibernate.findAllByTags(String.join(" ",validTags));
+        return codeRepositoryHibernate.findAllByTags(String.join(" ",validTags), pageable);
     }
 
     @Override
-    public List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language) {
-        List<String> validTags = validateTags(tags).stream().map(x->"+"+x)
-                .collect(Collectors.toList());
+    public List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language, Pageable pageable) {
+        List<String> validTags = parseTags(tags);
         if (validTags.isEmpty()){
             return Collections.emptyList();
         }
-        return codeRepositoryHibernate.findAllByTagsAndLanguage(String.join(" ",validTags), language.name());
+        return codeRepositoryHibernate.findAllByTagsAndLanguage(String.join(" ",validTags), language.name(), pageable);
     }
 
     @Override
-    public List<Code> findAllBySubstring(String substring) {
-        if (substring.isBlank()){
-            return Collections.emptyList();
-        }
-        String words = codeToSearchString(substring);
-        String searchString = Arrays.stream(words.split(" ")).map(x->"*"+x).collect(Collectors.joining(" "));
-        return codeRepositoryHibernate.findAllBySubstringInBooleanMode(searchString);
+    public List<Code> findAllBySubstring(String substring, Pageable pageable) {
+        String searchString = parseSearchString(substring);
+        return codeRepositoryHibernate.findAllBySubstringInBooleanMode(searchString, pageable);
     }
 
     @Override
-    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring) {
-        if (substring.isBlank()){
-            return Collections.emptyList();
-        }
-        String words = codeToSearchString(substring);
-        String searchString = Arrays.stream(words.split(" ")).map(x->"*"+x).collect(Collectors.joining(" "));
-        return codeRepositoryHibernate.findAllByLanguageAndSubstring(language.name(),searchString);
+    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring, Pageable pageable) {
+        String searchString = parseSearchString(substring);
+        return codeRepositoryHibernate.findAllByLanguageAndSubstring(language.name(), searchString, pageable);
+    }
+
+    @Override
+    public List<Code> findAllByTagsAndSubstring(Collection<String> tags, String substring, Pageable pageable) {
+        List<String> validTags = parseTags(tags);
+        String searchString = parseSearchString(substring);
+        return codeRepositoryHibernate.findAllByTagsAndSubstring(String.join(" ",validTags), searchString, pageable);
     }
 }

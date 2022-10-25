@@ -7,6 +7,7 @@ import com.al3xkras.code_clipboard.repository.CodeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PreDestroy;
@@ -145,8 +146,8 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     }
 
     @Override
-    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring) {
-        return findAllByTagsAndLanguage(Collections.singletonList(substring),language);
+    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring, Pageable pageable) {
+        return findAllByTagsAndLanguage(Collections.singletonList(substring),language, pageable);
     }
 
     @Override
@@ -205,7 +206,7 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     }
 
     @Override
-    public List<Code> findAllByTags(Collection<String> tags) {
+    public List<Code> findAllByTags(Collection<String> tags, Pageable pageable) {
         HashSet<Integer> query = null;
         for (String tag: tags){
             if (query==null){
@@ -229,17 +230,17 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     }
 
     @Override
-    public List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language) {
+    public List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language, Pageable pageable) {
         List<String> tagsList = new LinkedList<>(tags);
         tagsList.add(language.toString().toLowerCase()+delimiter);
-        return findAllByTags(tagsList);
+        return findAllByTags(tagsList, pageable);
     }
 
     @Override
-    public List<Code> findAllBySubstring(String substring) {
+    public List<Code> findAllBySubstring(String substring, Pageable pageable) {
         if (substring.contains(delimiter))
             throw new IllegalArgumentException("invalid query string: \""+substring+'\"');
-        return findAllByTags(Collections.singletonList(substring));
+        return findAllByTags(Collections.singletonList(substring), pageable);
     }
 
     @PreDestroy
