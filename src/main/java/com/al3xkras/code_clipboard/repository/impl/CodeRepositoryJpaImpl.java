@@ -15,6 +15,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @Profile("hibernate")
@@ -76,7 +77,8 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
     @Override
     @Transactional
     public List<Code> findAllByTags(Collection<String> tags) {
-        List<String> validTags = validateTags(tags);
+        List<String> validTags = validateTags(tags).stream().map(x->"+"+x)
+                .collect(Collectors.toList());
         if (validTags.isEmpty()){
             return Collections.emptyList();
         }
@@ -85,7 +87,8 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
 
     @Override
     public List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language) {
-        List<String> validTags = validateTags(tags);
+        List<String> validTags = validateTags(tags).stream().map(x->"+"+x)
+                .collect(Collectors.toList());
         if (validTags.isEmpty()){
             return Collections.emptyList();
         }

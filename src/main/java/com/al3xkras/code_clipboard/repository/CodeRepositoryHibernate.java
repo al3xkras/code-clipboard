@@ -12,10 +12,10 @@ import java.util.List;
 @Profile("hibernate")
 public interface CodeRepositoryHibernate extends JpaRepository<Code,Long> {
 
-    @Query(nativeQuery = true, value = "select * from code_samples where match(tag_string) against (?1 with query expansion)")
+    @Query(nativeQuery = true, value = "select * from code_samples where match(tag_string) against (?1 in boolean mode)")
     List<Code> findAllByTags(String tags);
 
-    @Query(nativeQuery = true, value = "select * from code_samples where programming_language=?2 and match(tag_string) against (?2 with query expansion)")
+    @Query(nativeQuery = true, value = "select * from code_samples where programming_language=?2 and match(tag_string) against (?2 in boolean mode)")
     List<Code> findAllByTagsAndLanguage(String tags, ProgrammingLanguage language);
 
     @Query(nativeQuery = true, value = "select * from code_samples where match(search_string) against (?1 in natural language mode)")
