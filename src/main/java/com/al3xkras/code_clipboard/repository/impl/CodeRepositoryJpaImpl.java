@@ -1,11 +1,9 @@
 package com.al3xkras.code_clipboard.repository.impl;
 
 import com.al3xkras.code_clipboard.entity.Code;
-import com.al3xkras.code_clipboard.entity.Tag;
 import com.al3xkras.code_clipboard.model.ProgrammingLanguage;
 import com.al3xkras.code_clipboard.repository.CodeRepository;
 import com.al3xkras.code_clipboard.repository.CodeRepositoryHibernate;
-import com.al3xkras.code_clipboard.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -16,11 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Repository
 @Profile("hibernate")
@@ -28,8 +22,11 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
 
     @Autowired
     private CodeRepositoryHibernate codeRepositoryHibernate;
-    @Autowired
-    private TagRepository tagRepository;
+
+    public static List<String> validateTags(Collection<String> tags){
+        return tags.stream().filter(t -> t.matches("^[a-zA-Z0-9 ]*$") && !t.isBlank())
+                .map(x -> x.replaceAll(" ", "_")).toList();
+    }
 
     public static String codeToSearchString(String code){
         return code.replaceAll("[^a-zA-Z\\d\\s]","").toLowerCase();
@@ -42,11 +39,14 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
         String password=bundle.getString("spring.datasource.password");
         String url=bundle.getString("spring.datasource.url");
         try (Connection conn = DriverManager.getConnection(url,username,password);
-             PreparedStatement ps = conn.prepareStatement("ALTER TABLE code_samples " +
-                     "ADD FULLTEXT(search_string);")){
-            ps.execute();
+             PreparedStatement ps1 = conn.prepareStatement("ALTER TABLE code_samples " +
+                     "ADD FULLTEXT(search_string);");
+             PreparedStatement ps2 = conn.prepareStatement("ALTER TABLE code_samples " +
+                     "ADD FULLTEXT(tag_string);")){
+            ps1.execute();
+            ps2.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -57,9 +57,8 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
 
     @Override
     public Code save(Code code, List<String> tags) {
-        List<Tag> tagList = tags.stream().map(s->Tag.builder().value(s).build())
-                        .collect(Collectors.toList());
-        code.setTags(tagList);
+        List<String> validTags = validateTags(tags);
+        code.setTagString(String.join(" ",validTags));
         code.setSearchString(CodeRepositoryJpaImpl.codeToSearchString(code.getCodeString()));
         return codeRepositoryHibernate.saveAndFlush(code);
     }
@@ -72,23 +71,35 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
     @Override
     @Transactional
     public List<Code> findAllByTags(Collection<String> tags) {
-        List<Tag> tagList = tagRepository.findAllByValueIn(tags);
-        return codeRepositoryHibernate.findAllByTags(tagList);
+        List<String> validTags = validateTags(tags);
+        if (validTags.isEmpty()){
+            return Collections.emptyList();
+        }
+        return codeRepositoryHibernate.findAllByTags(String.join(" ",validTags));
     }
 
     @Override
     public List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language) {
-        List<Tag> tagList = tagRepository.findAllByValueIn(tags);
-        return codeRepositoryHibernate.findAllByTagsAndLanguage(tagList, language);
+        List<String> validTags = validateTags(tags);
+        if (validTags.isEmpty()){
+            return Collections.emptyList();
+        }
+        return codeRepositoryHibernate.findAllByTagsAndLanguage(String.join(" ",validTags), language);
     }
 
     @Override
     public List<Code> findAllBySubstring(String substring) {
-        return codeRepositoryHibernate.findAllBySubstring(substring);
+        if (substring.isBlank()){
+            return Collections.emptyList();
+        }
+        return codeRepositoryHibernate.findAllBySubstringInBooleanMode("*"+substring+"*");
     }
 
     @Override
     public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring) {
-        return codeRepositoryHibernate.findAllByLanguageAndSubstring(language,substring);
+        if (substring.isBlank()){
+            return Collections.emptyList();
+        }
+        return codeRepositoryHibernate.findAllByLanguageAndSubstring(language,"*"+substring+"*");
     }
 }

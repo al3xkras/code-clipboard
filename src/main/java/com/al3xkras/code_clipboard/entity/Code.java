@@ -28,11 +28,9 @@ public class Code implements Serializable {
     private String codeString;
     @Column(name = "search_string", columnDefinition = "text(2048)",nullable = false)
     private String searchString;
+    @Column(name = "tag_string", columnDefinition = "text(512)", nullable = false)
+    private String tagString;
     @Enumerated(EnumType.STRING)
     @Column(name = "programming_language")
     private ProgrammingLanguage language;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "code_tags",joinColumns = @JoinColumn(name = "code_id",referencedColumnName = "code_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tag_id"))
-    private List<Tag> tags;
 }

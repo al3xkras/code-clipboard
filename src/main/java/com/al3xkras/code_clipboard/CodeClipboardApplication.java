@@ -13,12 +13,16 @@ public class CodeClipboardApplication {
 	public static void main(String[] args) throws URISyntaxException, IOException {
 		SpringApplication.run(CodeClipboardApplication.class, args);
 
+
+		/*
 		String os = System.getProperty("os.name").toLowerCase();
 		if (os.contains("win")){
 			Runtime rt = Runtime.getRuntime();
 			String url = "http://localhost:10000";
 			rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
 		}
+
+		 */
 
 	}
 
