@@ -13,7 +13,7 @@
 <div hidden>
     <div id="code-sample" class="code-sample d-flex flex-column" hidden>
         <label for="code-area"></label><br/>
-        <textarea class="hide-scrollbars" id="code-area" name="codeArea" style="background: black; color: #8d4bff; width: 800px; height: 300px; " oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+        <textarea class="hide-scrollbars" id="code-area" name="codeArea" style="background: black; color: #8d4bff; width: 700px;" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
         <div class="d-flex flex-row-reverse" style="margin: 5px 5px 10px;">
             <button class="btn btn-outline-danger btn-copy" onclick="codeDelete(this)">
                 <img class="btn-copy" th:src="@{svg/trash.svg}" alt=""/>
@@ -49,40 +49,38 @@
             <input type="text" id="tags" name="tags" class="tags-input" autocomplete="off" disabled>
             <input type="checkbox" id="tags-toggle">
         </div><br/>
-
-        <button class="btn btn-outline-success" type="submit" id="search-button" style="height: 250px; position: absolute">Search</button>
     </div>
 
     <div>
-        <div style="width: 100%">
-            <button id="next-page" type="button" onclick="previousPage()"><=</button>
-            <button id="previous-page" type="button" onclick="nextPage()">=></button>
+        <div class="d-flex flex-row" style="width: 100%">
+            <button class="btn btn-outline-success" type="submit" id="search-button" style="margin-right: 15px">Search</button>
+            <button class="btn btn-outline-secondary" id="next-page" type="button" onclick="previousPage()" style="margin-right: 10px"><=</button>
+            <button class="btn btn-outline-secondary" id="previous-page" type="button" onclick="nextPage()">=></button>
+            <label for="page-size"></label><input style="margin-left: 10px" type="number" min="1" max="20" value="2" id="page-size">
         </div>
-        <div class="code-samples d-flex flex-column flex-nowrap" id="code-samples" >
+        <div class="code-samples d-flex flex-row flex-wrap" id="code-samples">
 
         </div>
     </div>
 
 </div>
 <script>
-    const searchButton = document.getElementById("search-button")
-    searchButton.style.width="";
-    searchButton.style.width=searchButton.parentNode.offsetWidth+"px"
-</script>
-<script>
     let pageNum=0;
-    let pageSize=5;
+    let pageSize;
     let found=0;
+    const pageSizeInput=document.getElementById("page-size")
     function nextPage(){
         if (found>0) {
             pageNum++;
             found=0
+            pageSize=pageSizeInput.value;
             document.getElementById("search-button").click();
         }
     }
     function previousPage(){
         if (pageNum>0) {
             pageNum--
+            pageSize=pageSizeInput.value;
             document.getElementById("search-button").click();
         }
     }

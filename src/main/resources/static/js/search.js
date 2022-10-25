@@ -25,6 +25,8 @@ toggleSwitch(substringToggle,substringInput);
 toggleSwitch(tagsToggle,tagDelimiterInput,tagsInput);
 
 document.getElementById("search-button").addEventListener("click", e=>{
+    pageSize=pageSizeInput.value;
+    console.log(pageSize)
     const l = langToggle.checked;
     const s = substringToggle.checked;
     const t = tagsToggle.checked;
@@ -55,9 +57,9 @@ document.getElementById("search-button").addEventListener("click", e=>{
         tags=tags.replaceAll(new RegExp(delim,'g')," ");
         data.append("tags",tags);
     }
-    if (pageNum)
+    if (pageNum!=null)
         data.append("page",""+pageNum)
-    if (pageSize)
+    if (pageSize!=null)
         data.append("size",""+pageSize)
 
     const xhr = new XMLHttpRequest();
