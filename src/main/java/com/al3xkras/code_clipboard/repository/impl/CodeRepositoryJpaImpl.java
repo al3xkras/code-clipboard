@@ -4,6 +4,7 @@ import com.al3xkras.code_clipboard.entity.Code;
 import com.al3xkras.code_clipboard.model.ProgrammingLanguage;
 import com.al3xkras.code_clipboard.repository.CodeRepository;
 import com.al3xkras.code_clipboard.repository.CodeRepositoryHibernate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
@@ -13,16 +14,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Repository
 @Profile("hibernate")
 public class CodeRepositoryJpaImpl implements CodeRepository {
+
+    private static final int MYSQL_DUPLICATE_KEY_ERROR = 1061;
 
     @Autowired
     private CodeRepositoryHibernate codeRepositoryHibernate;
@@ -57,11 +58,27 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
         String url=bundle.getString("spring.datasource.url");
         try (Connection conn = DriverManager.getConnection(url,username,password);
              PreparedStatement ps1 = conn.prepareStatement("ALTER TABLE code_samples " +
-                     "ADD FULLTEXT(search_string);");
-             PreparedStatement ps2 = conn.prepareStatement("ALTER TABLE code_samples " +
-                     "ADD FULLTEXT(tag_string);")){
+                     "ADD FULLTEXT KEY search_fulltext (search_string);")){
             ps1.execute();
+        } catch (SQLSyntaxErrorException e){
+            if (e.getErrorCode()==MYSQL_DUPLICATE_KEY_ERROR){
+                log.warn("fulltext index for column code_samples.\"search_string\" already exists");
+            } else {
+                throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try (Connection conn = DriverManager.getConnection(url,username,password);
+             PreparedStatement ps2 = conn.prepareStatement("ALTER TABLE code_samples " +
+                     "ADD FULLTEXT KEY tag_fulltext (tag_string);")){
             ps2.execute();
+        } catch (SQLSyntaxErrorException e){
+            if (e.getErrorCode()==MYSQL_DUPLICATE_KEY_ERROR){
+                log.warn("fulltext index for column code_samples.\"tag_string\" already exists");
+            } else{
+                throw new RuntimeException(e);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
