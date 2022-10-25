@@ -5,6 +5,7 @@ import com.al3xkras.code_clipboard.model.ProgrammingLanguage;
 import com.al3xkras.code_clipboard.model.suffixtree.GeneralizedSuffixTree;
 import com.al3xkras.code_clipboard.repository.CodeRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Slf4j
 @Repository
+@Profile("disabled")
 public class CodeRepositoryTreeImpl implements CodeRepository {
 
     private String storageDir = "/tmp/storage/";

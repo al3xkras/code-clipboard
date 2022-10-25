@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CodeRepository {
-
     Optional<Code> findById(Long id);
     Code save(Code code,List<String> tags);
     Code deleteById(Long id);

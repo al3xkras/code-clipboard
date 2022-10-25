@@ -1,5 +1,0 @@
-server:
-  port: 10000
-  shutdown: GRACEFUL
-spring:
-  mandatory-file-encoding: UTF-8
