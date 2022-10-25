@@ -53,12 +53,39 @@
         <button class="btn btn-outline-success" type="submit" id="search-button" style="height: 250px; position: absolute">Search</button>
     </div>
 
-    <div class="code-samples d-flex flex-column flex-nowrap" id="code-samples" ></div>
+    <div>
+        <div style="width: 100%">
+            <button id="next-page" type="button" onclick="previousPage()"><=</button>
+            <button id="previous-page" type="button" onclick="nextPage()">=></button>
+        </div>
+        <div class="code-samples d-flex flex-column flex-nowrap" id="code-samples" >
+
+        </div>
+    </div>
+
 </div>
 <script>
     const searchButton = document.getElementById("search-button")
     searchButton.style.width="";
     searchButton.style.width=searchButton.parentNode.offsetWidth+"px"
+</script>
+<script>
+    let pageNum=0;
+    let pageSize=5;
+    let found=0;
+    function nextPage(){
+        if (found>0) {
+            pageNum++;
+            found=0
+            document.getElementById("search-button").click();
+        }
+    }
+    function previousPage(){
+        if (pageNum>0) {
+            pageNum--
+            document.getElementById("search-button").click();
+        }
+    }
 </script>
 <script type="text/javascript" th:src="@{/js/code_delete.js}"></script>
 <script type="text/javascript" th:src="@{/js/code_copy.js}"></script>

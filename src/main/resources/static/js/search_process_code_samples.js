@@ -16,6 +16,7 @@ const processCodeSamples=function () {
             codeArea.style.color="cyan"
         }
         codeView.appendChild(template);
+        found++
         template.hidden=null;
 
         codeArea.innerHTML=sample.codeString;

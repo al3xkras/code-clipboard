@@ -55,6 +55,10 @@ document.getElementById("search-button").addEventListener("click", e=>{
         tags=tags.replaceAll(new RegExp(delim,'g')," ");
         data.append("tags",tags);
     }
+    if (pageNum)
+        data.append("page",""+pageNum)
+    if (pageSize)
+        data.append("size",""+pageSize)
 
     const xhr = new XMLHttpRequest();
     xhr.overrideMimeType("application/json");
