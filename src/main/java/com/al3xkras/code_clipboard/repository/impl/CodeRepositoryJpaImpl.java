@@ -64,8 +64,13 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
     }
 
     @Override
+    @Transactional
     public Code deleteById(Long id) {
-        return codeRepositoryHibernate.deleteByCodeId(id);
+        Code c = findById(id).orElse(null);
+        if (c==null)
+            return null;
+        codeRepositoryHibernate.deleteById(id);
+        return c;
     }
 
     @Override

@@ -4,19 +4,13 @@ import com.al3xkras.code_clipboard.entity.Code;
 import com.al3xkras.code_clipboard.model.ProgrammingLanguage;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
 @Profile("hibernate")
 public interface CodeRepositoryHibernate extends JpaRepository<Code,Long> {
-    @Transactional
-    @Modifying
-    Code deleteByCodeId(Long id);
 
     @Query(nativeQuery = true, value = "select * from code_samples where match(tag_string) against (?1 with query expansion)")
     List<Code> findAllByTags(String tags);
