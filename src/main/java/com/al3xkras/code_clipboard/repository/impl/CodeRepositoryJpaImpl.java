@@ -92,7 +92,7 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
         if (validTags.isEmpty()){
             return Collections.emptyList();
         }
-        return codeRepositoryHibernate.findAllByTagsAndLanguage(String.join(" ",validTags), language);
+        return codeRepositoryHibernate.findAllByTagsAndLanguage(String.join(" ",validTags), language.name());
     }
 
     @Override
@@ -100,7 +100,9 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
         if (substring.isBlank()){
             return Collections.emptyList();
         }
-        return codeRepositoryHibernate.findAllBySubstringInBooleanMode("*"+substring+"*");
+        String words = codeToSearchString(substring);
+        String searchString = Arrays.stream(words.split(" ")).map(x->"*"+x).collect(Collectors.joining(" "));
+        return codeRepositoryHibernate.findAllBySubstringInBooleanMode(searchString);
     }
 
     @Override
@@ -108,6 +110,8 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
         if (substring.isBlank()){
             return Collections.emptyList();
         }
-        return codeRepositoryHibernate.findAllByLanguageAndSubstring(language,"*"+substring+"*");
+        String words = codeToSearchString(substring);
+        String searchString = Arrays.stream(words.split(" ")).map(x->"*"+x).collect(Collectors.joining(" "));
+        return codeRepositoryHibernate.findAllByLanguageAndSubstring(language.name(),searchString);
     }
 }

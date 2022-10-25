@@ -30,7 +30,7 @@ public class Code implements Serializable {
     private String searchString;
     @Column(name = "tag_string", columnDefinition = "text(512)", nullable = false)
     private String tagString;
-    @Enumerated(EnumType.STRING)
     @Column(name = "programming_language")
+    @Enumerated(EnumType.STRING)
     private ProgrammingLanguage language;
 }
