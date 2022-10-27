@@ -7,10 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Profile;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

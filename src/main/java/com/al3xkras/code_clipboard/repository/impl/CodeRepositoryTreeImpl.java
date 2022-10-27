@@ -17,7 +17,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.al3xkras.code_clipboard.CodeClipboardApplication.delimiter;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;

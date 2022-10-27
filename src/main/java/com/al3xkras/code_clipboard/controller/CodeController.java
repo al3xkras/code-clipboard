@@ -9,7 +9,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
@@ -49,16 +52,14 @@ public class CodeController {
                 .map(String::toLowerCase)
                 .collect(Collectors.toList());
 
-        log.info(tags.toString());
         ProgrammingLanguage lang=null;
         try {
             lang=ProgrammingLanguage.valueOf(language.toUpperCase());
             if (lang.equals(ProgrammingLanguage.NOT_SPECIFIED))
                 lang=null;
         }catch (IllegalArgumentException | NullPointerException ignored){
-            log.info(language);
+            log.error(language);
         }
-        log.info("lang: "+lang);
 
         if (lang==null){
             if (substring!=null){

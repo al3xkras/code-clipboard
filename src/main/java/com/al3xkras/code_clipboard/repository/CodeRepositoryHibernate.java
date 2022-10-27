@@ -1,15 +1,12 @@
 package com.al3xkras.code_clipboard.repository;
 
 import com.al3xkras.code_clipboard.entity.Code;
-import com.al3xkras.code_clipboard.model.ProgrammingLanguage;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.util.List;
 
 @Repository
