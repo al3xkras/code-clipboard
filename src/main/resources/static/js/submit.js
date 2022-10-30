@@ -24,7 +24,6 @@ document.getElementById("submit-button").addEventListener("click", e=>{
     const data = new FormData();
     if (langSelect.selectedIndex>0){
         const lang = langSelect.options[langSelect.selectedIndex].getAttribute("name");
-        console.log(lang)
         data.append("language",lang);
     }
     const code = codeInput.value;

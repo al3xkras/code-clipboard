@@ -48,7 +48,11 @@
             <label for="tags">Tags (separated by space): </label>
             <input type="text" id="tags" name="tags" class="tags-input" autocomplete="off" disabled
                    oninput="pageNum=0">
-            <input type="checkbox" id="tags-toggle" oninput="pageNum=0">
+            <input type="checkbox" id="tags-toggle" oninput="pageNum=0"><br/><br/>
+            <label for="google-search-toggle">Google if no code samples found</label>
+            <input type="checkbox" id="google-search-toggle"><br/><br/>
+            <label for="extended-search-toggle">Extended search</label>
+            <input type="checkbox" id="extended-search-toggle" checked onchange="extendedSearch=this.checked">
         </div><br/>
     </div>
 
@@ -88,9 +92,9 @@
 </script>
 <script type="text/javascript" th:src="@{/js/code_delete.js}"></script>
 <script type="text/javascript" th:src="@{/js/code_copy.js}"></script>
-<script type="text/javascript" th:src="@{/js/search_hotkeys.js}"></script>
 <script type="text/javascript" th:src="@{/js/search_process_code_samples.js}"></script>
 <script type="text/javascript" th:src="@{/js/search.js}"></script>
+<script type="text/javascript" th:src="@{/js/search_hotkeys.js}"></script>
 
 </body>
 </html>

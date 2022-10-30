@@ -7,6 +7,14 @@ const substringInput=document.getElementById("substring")
 const tagDelimiterInput=document.getElementById("tag-delim")
 const tagsInput=document.getElementById("tags")
 
+let extendedSearch = document.getElementById("extended-search-toggle").checked
+let extendedSearchDisable = false;
+let substring = ""
+let tags = ""
+let substringSearch = substringToggle.checked
+let tagSearch = tagsToggle.checked
+let pageNumSaved;
+
 const toggleSwitch = function (inputCheckbox,...elements) {
     inputCheckbox.addEventListener("click",e=>{
         if (inputCheckbox.checked){
@@ -25,11 +33,26 @@ toggleSwitch(substringToggle,substringInput);
 toggleSwitch(tagsToggle,tagDelimiterInput,tagsInput);
 
 document.getElementById("search-button").addEventListener("click", e=>{
+    if (extendedSearchDisable){
+        extendedSearch=false
+        console.log("disabled")
+    } else {
+        substring = substringInput.value
+        tags = tagsInput.value
+        substringSearch = substringToggle.checked
+        tagSearch = tagsToggle.checked
+        pageNumSaved=pageNum
+        console.log("set")
+        console.log(substringSearch)
+        console.log(tagSearch)
+    }
+    console.log(substring)
+    console.log(tags)
+
     pageSize=pageSizeInput.value;
-    console.log(pageSize)
     const l = langToggle.checked;
-    const s = substringToggle.checked;
-    const t = tagsToggle.checked;
+    const s = substringSearch;
+    const t = tagSearch;
     if (l && !s && !t){
         alert("Unable to search code by programming language only");
         return;
@@ -40,12 +63,10 @@ document.getElementById("search-button").addEventListener("click", e=>{
     const data = new FormData();
     if (l){
         const lang = langSelect.options[langSelect.selectedIndex].getAttribute("name");
-        console.log(lang)
         data.append("language",lang);
     }
     if (s){
-        const substr = substringInput.value;
-        data.append("substring",substr);
+        data.append("substring",substring);
     }
     if (t){
         let delim = " ";//tagDelimiterInput.value
@@ -53,9 +74,8 @@ document.getElementById("search-button").addEventListener("click", e=>{
             delim=" ";
         }
         console.log(delim)
-        let tags = ""+tagsInput.value;
-        tags=tags.replaceAll(new RegExp(delim,'g')," ");
-        data.append("tags",tags);
+        let tags1 =tags.replaceAll(new RegExp(delim,'g')," ");
+        data.append("tags",tags1);
     }
     if (pageNum!=null)
         data.append("page",""+pageNum)
@@ -66,7 +86,6 @@ document.getElementById("search-button").addEventListener("click", e=>{
     xhr.overrideMimeType("application/json");
     xhr.open('POST', '/search', true);
     xhr.onload = function () {
-        console.log(xhr.status);
         if (xhr.status===200){
             codeSamples=JSON.parse(xhr.responseText);
             processCodeSamples()
@@ -75,4 +94,9 @@ document.getElementById("search-button").addEventListener("click", e=>{
         }
     };
     xhr.send(data);
+    if (!extendedSearchDisable){
+        extendedSearch = document.getElementById("extended-search-toggle").checked
+    } else {
+        extendedSearchDisable=false
+    }
 });

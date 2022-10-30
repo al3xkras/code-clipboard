@@ -1,3 +1,4 @@
+let searchButton = document.getElementById("search-button");
 $(document).ready(function() {
     var ctrlDown = false,
         ctrlKey = 17,
@@ -9,6 +10,9 @@ $(document).ready(function() {
 
     $(document).keydown(function (e) {
         if (e.keyCode === ctrlKey || e.keyCode === cmdKey) ctrlDown = true;
+        else if (e.keyCode === 13) {
+            searchButton.click()
+        }
     }).keyup(function (e) {
         if (e.keyCode === ctrlKey || e.keyCode === cmdKey) {
             ctrlDown = false;
