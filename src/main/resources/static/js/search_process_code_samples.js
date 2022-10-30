@@ -4,7 +4,6 @@ function clearCodeTemplates(){
     codeView.innerHTML='';
 }
 const processCodeSamples=function () {
-    clearCodeTemplates();
     let i=1;
     let googleSearch = document.getElementById("google-search-toggle").checked
     googleSearch = googleSearch && pageNum===0 && !extendedSearchDisable
@@ -45,6 +44,8 @@ const processCodeSamples=function () {
             alert("Empty response")
         }
         return
+    } else {
+        clearCodeTemplates();
     }
     codeSamples.forEach(sample=>{
         let template = document.querySelector('#code-sample').cloneNode(true);
