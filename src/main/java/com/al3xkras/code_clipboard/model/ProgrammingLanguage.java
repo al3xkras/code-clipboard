@@ -3,14 +3,26 @@ package com.al3xkras.code_clipboard.model;
 public enum ProgrammingLanguage {
     NOT_SPECIFIED("Any"),
     JAVA("Java"),
+    KOTLIN("Kotlin"),
     JS("JavaScript"),
-    CSS("CSS"),
     PYTHON("python"),
-    C("c"),
-    CPP("c++"),
+    C("C"),
+    CPP("C++"),
+    CS("C#"),
+    GOLANG("Go"),
+    TS("TypeScript"),
+    RUST("Rust"),
+    RUBY("Ruby"),
+    CSS("CSS"),
     XML("XML"),
-    HTML("html"),
-    YML("yaml");
+    HTML("HTML"),
+    MARKDOWN("Markdown"),
+    LATEX("LaTeX"),
+    PHP("PHP"),
+    ERLANG("Erlang"),
+    CMD("Batchfile"),
+    BASH("bash"),
+    ASSEMBLY("Assembly");
 
     private String prettyName;
     ProgrammingLanguage(String prettyName){
