@@ -32,7 +32,9 @@ document.getElementById("submit-button").addEventListener("click", e=>{
 
     if (imageInput.files[0]){
         const imageFile = imageInput.files[0];
+        const hideCodeText = confirm("Hide code text when displaying the code sample?")
         data.append("code-image",imageFile)
+        data.append("hide-code-text",""+hideCodeText)
     }
 
     if (t){

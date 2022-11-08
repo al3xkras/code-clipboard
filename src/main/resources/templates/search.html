@@ -14,7 +14,8 @@
     <div id="code-sample" class="code-sample d-flex flex-column" hidden>
         <label for="code-area"></label><br/>
         <textarea class="hide-scrollbars" id="code-area" name="codeArea" style="background: black; color: #8d4bff; width: 700px;" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
-        <div class="d-flex flex-row-reverse" style="margin: 5px 5px 10px;">
+        <img id="code-image" name="codeImage" alt="" src="" style="max-width: 600px; width: 80%;" hidden>
+        <div class="d-flex flex-row-reverse" style="margin: 5px 10% 10px 5px;">
             <button class="btn btn-outline-danger btn-copy" onclick="codeDelete(this)">
                 <img class="btn-copy" th:src="@{svg/trash.svg}" alt=""/>
             </button>
@@ -22,7 +23,6 @@
                 <img class="btn-copy" th:src="@{svg/clipboard.svg}" alt=""/>
             </button>
         </div>
-        <img id="code-image" name="codeImage" alt="" src="" hidden>
     </div>
 </div>
 
@@ -61,7 +61,7 @@
             <button class="btn btn-outline-success" type="submit" id="search-button" style="margin-right: 15px">Search</button>
             <button class="btn btn-outline-secondary" id="next-page" type="button" onclick="previousPage()" style="margin-right: 10px"><=</button>
             <button class="btn btn-outline-secondary" id="previous-page" type="button" onclick="nextPage()">=></button>
-            <label for="page-size"></label><input style="margin-left: 10px" type="number" min="1" max="20" value="2" id="page-size">
+            <label for="page-size"></label><input style="margin-left: 10px" type="number" min="1" max="20" value="1" id="page-size">
         </div>
         <div class="code-samples d-flex flex-row flex-wrap" id="code-samples">
 

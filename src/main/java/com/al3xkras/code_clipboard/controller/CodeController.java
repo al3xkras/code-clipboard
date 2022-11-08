@@ -86,7 +86,8 @@ public class CodeController {
     public void receiveCodeSample(@RequestParam(name = "language",required = false) String language,
                                   @RequestParam(name = "code")String codeString,
                                   @RequestParam(name = "tags",required = false) String tagString,
-                                  @RequestParam(name = "code-image",required = false) MultipartFile image) throws IOException {
+                                  @RequestParam(name = "code-image",required = false) MultipartFile image,
+                                  @RequestParam(name = "hide-code-text", required = false) Boolean hideCodeText) throws IOException {
 
         if ((codeString==null || codeString.isBlank()) && image==null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"code sample is empty");
@@ -106,6 +107,7 @@ public class CodeController {
         Code code = Code.builder()
                 .codeString(codeString)
                 .codeImage(image==null?null:image.getBytes())
+                .hideCodeText(hideCodeText!=null && image!=null && hideCodeText)
                 .language(lang)
                 .build();
 

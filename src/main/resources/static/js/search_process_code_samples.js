@@ -70,6 +70,10 @@ const processCodeSamples=function () {
             codeArea.style.height = maxHeight+"px"
         }
 
+        if (sample.hideCodeText){
+            codeArea.hidden=true
+        }
+
         if (sample.codeImage){
             codeImage.src="data:image/png;base64,"+sample.codeImage;
             codeImage.hidden=null

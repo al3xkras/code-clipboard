@@ -34,4 +34,6 @@ public class Code implements Serializable {
     @Lob
     @Column(name = "code_image", columnDefinition = "mediumblob")
     private byte[] codeImage;
+    @Column(name = "hide_code")
+    private Boolean hideCodeText;
 }
