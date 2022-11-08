@@ -29,8 +29,7 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
     private CodeRepositoryHibernate codeRepositoryHibernate;
 
     public static List<String> validateTags(Collection<String> tags){
-        return tags.stream().filter(t -> t.matches("^[a-zA-Z0-9 _\\-:/.!+]*$") && !t.isBlank())
-                .map(x -> x.replaceAll(" ", "_")).toList();
+        return tags.stream().toList();
     }
 
     public static List<String> parseTags(Collection<String> tags){

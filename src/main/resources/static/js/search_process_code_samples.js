@@ -3,6 +3,13 @@ const codeView=document.getElementById("code-samples");
 function clearCodeTemplates(){
     codeView.innerHTML='';
 }
+function codeShow(node){
+    let codeArea = node.parentNode.parentNode.querySelectorAll('[name="codeArea"]')[0];
+    let codeImage = node.parentNode.parentNode.querySelectorAll('[name="codeImage"]')[0];
+    codeArea.hidden=null
+    codeImage.hidden=true
+    node.hidden=true
+}
 const processCodeSamples=function () {
     let i=1;
     let googleSearch = document.getElementById("google-search-toggle").checked
@@ -51,6 +58,8 @@ const processCodeSamples=function () {
         let template = document.querySelector('#code-sample').cloneNode(true);
         let codeArea = template.querySelectorAll('[name="codeArea"]')[0];
         let codeImage = template.querySelectorAll('[name="codeImage"]')[0];
+        let codeShowButton = template.querySelectorAll('[name="btnShowCode"]')[0];
+
         template.setAttribute("id","sample"+sample.codeId);
         template.setAttribute("entity-id",""+sample.codeId);
         i++;
@@ -72,6 +81,7 @@ const processCodeSamples=function () {
 
         if (sample.hideCodeText){
             codeArea.hidden=true
+            codeShowButton.hidden=null
         }
 
         if (sample.codeImage){

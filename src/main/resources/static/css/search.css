@@ -26,6 +26,12 @@ div.search-form {
     width: 30px;
     height: 30px;
 }
+.btn-show-code{
+    margin-left: 10px;
+    margin-top: 5px;
+    padding: 0;
+    height: 25px;
+}
 img.btn-copy{
     background: transparent;
     padding: 7px;

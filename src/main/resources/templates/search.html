@@ -14,13 +14,18 @@
     <div id="code-sample" class="code-sample d-flex flex-column" hidden>
         <label for="code-area"></label><br/>
         <textarea class="hide-scrollbars" id="code-area" name="codeArea" style="background: black; color: #8d4bff; width: 700px;" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
-        <img id="code-image" name="codeImage" alt="" src="" style="max-width: 600px; width: 80%;" hidden>
+        <div class="hide-scrollbars" style="width: 100%; max-height: 300px; overflow: scroll">
+            <img id="code-image" name="codeImage" alt="" src="" style="max-width: 100%; width: 95%; background: white" hidden>
+        </div>
         <div class="d-flex flex-row-reverse" style="margin: 5px 10% 10px 5px;">
             <button class="btn btn-outline-danger btn-copy" onclick="codeDelete(this)">
                 <img class="btn-copy" th:src="@{svg/trash.svg}" alt=""/>
             </button>
             <button class="btn btn-outline-primary btn-copy" id="btn-copy" onclick="codeCopy(this)">
                 <img class="btn-copy" th:src="@{svg/clipboard.svg}" alt=""/>
+            </button>
+            <button class="btn btn-outline-success btn-show-code btn-sm border-0 text-center" id="btn-show-code" name="btnShowCode" onclick="codeShow(this)" hidden>
+                &#60show code&#62
             </button>
         </div>
     </div>
