@@ -23,7 +23,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Slf4j
 @Repository
-@Profile("disabled")
+@Profile("suffixtree")
 public class CodeRepositoryTreeImpl implements CodeRepository {
 
     private String storageDir = "/tmp/storage/";
