@@ -1,17 +1,45 @@
 <div>
 <h3>Code clipboard</h3>
-<h5>A simple code clipboard that allows user to submit, store and efficiently query code samples.</h5>
-<h5>The clipboard allows user to query code samples by a programming language, a set of tags, assigned to the code, substrings of code samples, and any combination of the above options. This application uses temporary file-stored database to store code samples.</h5>
-<h5>The file-stored database uses <b>GeneralizedSuffixTree</b></h5>(see https://github.com/abahgat/suffixtree)
+<p>A simple code storage that allows user to submit, store and efficiently query code samples.
+<p>The clipboard provides methods for querying samples by programming language, a set of tags assigned to the code, code substrings, and any possible combinations of the given options.
 
-<h4>Application endpoints:</h4>
+
+<style>
+ul {
+  margin: 0;
+}
+ul.dashed {
+  list-style-type: none;
+}
+ul.dashed > li {
+  text-indent: -5px;
+  margin-top: 10px;
+}
+ul > li{
+  margin-top: 10px;
+}
+ul.dashed > li:before {
+  content: "-";
+  text-indent: -5px;
+}
+</style>
+<p>Available Spring profiles:
+<ul class="dashed">
+    <li> hibernate: Enable JPA Hibernate Code repository implementation</li>
+    <li> suffixtree: Use an alternative code repository based on the GeneralizedSuffixTree (see https://github.com/abahgat/suffixtree)</li>
+    <li> default: Default Spring profile</li>
+</ul>
+
+<p>Application endpoints:
 <ul>
-<li>(GET) / Index page</li>
-<li>(GET) /search Search webpage</li>
-<li>(GET) /submit Submit webpage</li>
-<li>(POST) /send-code Send a Code sample</li>
-<li>(POST) /search Search code samples with options</li>
+    <li>(GET) $host name$/ : Index webpage</li>
+    <li>(GET) $host name$/search : Search (code) webpage</li>
+    <li>(GET) $host name$/submit : Submit (code) webpage</li>
+    <li>(POST) $host name$/send-code : Send a new Code sample in JSON format</li>
+    <li>(POST) $host name$/search : Search for code samples by specified parameters</li>
+    <li>(POST) $host name$/quit : Kill application server</li>
 </ul>
 </div>
 
-https://user-images.githubusercontent.com/62184786/197869099-1c58b588-3405-4d6b-b385-122b84ca3a60.mp4
+<p>Preview:</p>
+<video src="https://user-images.githubusercontent.com/62184786/197869099-1c58b588-3405-4d6b-b385-122b84ca3a60.mp4"></video>
