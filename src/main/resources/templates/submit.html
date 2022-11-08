@@ -18,17 +18,22 @@
 </div><br/>
 <div>
     <label for="code">Code</label><br/>
-    <textarea id="code" name="code" rows="5" cols="40" autocomplete="off"></textarea>
+    <textarea id="code" name="code" rows="7" cols="50" autocomplete="off"></textarea>
 </div>
 
+<br/>
 <div>
     <label for="tags">Tags (separated by space): </label>
     <input type="text" id="tags" name="tags" autocomplete="off">
     <input type="checkbox" id="tags-toggle" checked>
-
+</div>
+<br/>
+<div>
+    <pre>Code image: </pre>
+    <input type="file" id="image-input" name="imageInput" accept="image/jpeg, image/png" autocomplete="off">
 </div>
 
-
+<br/>
 <button class="btn btn-outline-success" type="button" id="submit-button">Submit</button>
 
 <script type="text/javascript" th:src="@{/js/submit_hotkeys.js}"></script>

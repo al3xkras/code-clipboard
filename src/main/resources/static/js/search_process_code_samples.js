@@ -50,6 +50,7 @@ const processCodeSamples=function () {
     codeSamples.forEach(sample=>{
         let template = document.querySelector('#code-sample').cloneNode(true);
         let codeArea = template.querySelectorAll('[name="codeArea"]')[0];
+        let codeImage = template.querySelectorAll('[name="codeImage"]')[0];
         template.setAttribute("id","sample"+sample.codeId);
         template.setAttribute("entity-id",""+sample.codeId);
         i++;
@@ -67,6 +68,11 @@ const processCodeSamples=function () {
             codeArea.style.height = codeArea.scrollHeight+"px"
         } else {
             codeArea.style.height = maxHeight+"px"
+        }
+
+        if (sample.codeImage){
+            codeImage.src="data:image/png;base64,"+sample.codeImage;
+            codeImage.hidden=null
         }
     });
 }

@@ -3,6 +3,7 @@ const codeInput=document.getElementById("code");
 const tagsInput=document.getElementById("tags");
 
 const tagsToggle=document.getElementById("tags-toggle");
+const imageInput=document.getElementById("image-input");
 
 const toggleSwitch = function (inputCheckbox,...elements) {
     inputCheckbox.addEventListener("click",e=>{
@@ -29,6 +30,11 @@ document.getElementById("submit-button").addEventListener("click", e=>{
     const code = codeInput.value;
     data.append("code",code);
 
+    if (imageInput.files[0]){
+        const imageFile = imageInput.files[0];
+        data.append("code-image",imageFile)
+    }
+
     if (t){
         let tags = ""+tagsInput.value;
         data.append("tags",tags);
@@ -38,11 +44,12 @@ document.getElementById("submit-button").addEventListener("click", e=>{
     xhr.overrideMimeType("application/json");
     xhr.open('POST', '/send-code', true);
     xhr.onload = function () {
-        console.log(xhr.status);
         if (xhr.status===200){
             alert("submitted successfully")
             tagsInput.value="";
             codeInput.value="";
+            imageInput.type="text"
+            imageInput.type="file"
             langSelect.selectedIndex=0;
         } else {
             alert(xhr.status)

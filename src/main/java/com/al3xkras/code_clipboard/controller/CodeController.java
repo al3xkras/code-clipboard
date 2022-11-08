@@ -9,12 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +22,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 public class CodeController {
+    public static final List<String> ALLOWED_IMAGE_TYPES = List.of("image/jpeg", "image/png");
+
     @Autowired
     private CodeService codeService;
 
@@ -82,13 +83,21 @@ public class CodeController {
     }
 
     @PostMapping("/send-code")
-    public ResponseEntity<Code> receiveCodeSample(@RequestParam(name = "language",required = false) String language,
-                                                  @RequestParam(name = "code")String codeString,
-                                                  @RequestParam(name = "tags",required = false) String tagString){
+    public void receiveCodeSample(@RequestParam(name = "language",required = false) String language,
+                                  @RequestParam(name = "code")String codeString,
+                                  @RequestParam(name = "tags",required = false) String tagString,
+                                  @RequestParam(name = "code-image",required = false) MultipartFile image) throws IOException {
 
-        if (codeString.isEmpty())
+        if ((codeString==null || codeString.isBlank()) && image==null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"code sample is empty");
 
+        if ((codeString==null || codeString.isEmpty()) && image!=null && (tagString==null||tagString.isBlank())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"code sample contains sample image while not containing code/tags");
+        }
+
+        if (image!=null && !ALLOWED_IMAGE_TYPES.contains(image.getContentType())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"unsupported image type.");
+        }
 
         ProgrammingLanguage lang=ProgrammingLanguage.NOT_SPECIFIED;
         try {
@@ -96,6 +105,7 @@ public class CodeController {
         }catch (IllegalArgumentException | NullPointerException ignored){}
         Code code = Code.builder()
                 .codeString(codeString)
+                .codeImage(image==null?null:image.getBytes())
                 .language(lang)
                 .build();
 
@@ -105,7 +115,6 @@ public class CodeController {
         } else {
             codeService.save(code,Collections.emptyList());
         }
-        return ResponseEntity.ok(code);
     }
 
     @PostMapping("/delete/{id}")

@@ -31,4 +31,7 @@ public class Code implements Serializable {
     @Column(name = "programming_language")
     @Enumerated(EnumType.STRING)
     private ProgrammingLanguage language;
+    @Lob
+    @Column(name = "code_image", columnDefinition = "mediumblob")
+    private byte[] codeImage;
 }

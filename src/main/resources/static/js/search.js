@@ -13,6 +13,9 @@ let substring = ""
 let tags = ""
 let substringSearch = substringToggle.checked
 let tagSearch = tagsToggle.checked
+if (substringSearch && tagSearch){
+    extendedSearch=false
+}
 let pageNumSaved;
 
 const toggleSwitch = function (inputCheckbox,...elements) {
@@ -35,19 +38,13 @@ toggleSwitch(tagsToggle,tagDelimiterInput,tagsInput);
 document.getElementById("search-button").addEventListener("click", e=>{
     if (extendedSearchDisable){
         extendedSearch=false
-        console.log("disabled")
     } else {
         substring = substringInput.value
         tags = tagsInput.value
         substringSearch = substringToggle.checked
         tagSearch = tagsToggle.checked
         pageNumSaved=pageNum
-        console.log("set")
-        console.log(substringSearch)
-        console.log(tagSearch)
     }
-    console.log(substring)
-    console.log(tags)
 
     pageSize=pageSizeInput.value;
     const l = langToggle.checked;
@@ -73,7 +70,6 @@ document.getElementById("search-button").addEventListener("click", e=>{
         if (delim.length===0) {
             delim=" ";
         }
-        console.log(delim)
         let tags1 =tags.replaceAll(new RegExp(delim,'g')," ");
         data.append("tags",tags1);
     }
@@ -96,6 +92,9 @@ document.getElementById("search-button").addEventListener("click", e=>{
     xhr.send(data);
     if (!extendedSearchDisable){
         extendedSearch = document.getElementById("extended-search-toggle").checked
+        if (substringSearch && tagSearch){
+            extendedSearch=false
+        }
     } else {
         extendedSearchDisable=false
     }
