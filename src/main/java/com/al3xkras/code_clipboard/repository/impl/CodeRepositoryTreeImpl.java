@@ -145,7 +145,7 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     }
 
     @Override
-    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring, Pageable pageable) {
+    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring, Pageable pageable, Object... additionalArgs) {
         return findAllByTagsAndLanguage(Collections.singletonList(substring),language, pageable);
     }
 
@@ -236,7 +236,7 @@ public class CodeRepositoryTreeImpl implements CodeRepository {
     }
 
     @Override
-    public List<Code> findAllBySubstring(String substring, Pageable pageable) {
+    public List<Code> findAllBySubstring(String substring, Pageable pageable, Object... additionalArgs) {
         if (substring.contains(delimiter))
             throw new IllegalArgumentException("invalid query string: \""+substring+'\"');
         return findAllByTags(Collections.singletonList(substring), pageable);

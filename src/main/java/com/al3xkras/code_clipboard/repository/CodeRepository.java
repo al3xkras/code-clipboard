@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public interface CodeRepository {
@@ -17,11 +18,11 @@ public interface CodeRepository {
     Code deleteById(Long id);
     List<Code> findAllByTags(Collection<String> tags, Pageable pageable);
     List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language, Pageable pageable);
-    List<Code> findAllBySubstring(String substring, Pageable pageable);
-    default List<Code> findAllByTagsAndSubstring(Collection<String> tags, String substring, Pageable pageable){
+    List<Code> findAllBySubstring(String substring, Pageable pageable, Object... additionalArgs);
+    default List<Code> findAllByTagsAndSubstring(Collection<String> tags, String substring, Pageable pageable, Object... additionalArgs){
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"not implemented");
     }
     default void load(){};
     default void serialize() throws IOException{};
-    List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring, Pageable pageable);
+    List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring, Pageable pageable, Object... additionalArgs);
 }

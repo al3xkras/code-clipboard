@@ -19,15 +19,21 @@ public interface CodeRepositoryHibernate extends JpaRepository<Code,Long> {
     @Query(nativeQuery = true, value = "select * from code_samples where programming_language=?2 and match(tag_string) against (?1 in boolean mode)")
     List<Code> findAllByTagsAndLanguage(String tags, String language, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "select * from code_samples where match(search_string) against (?1 IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION)")
-    List<Code> findAllByWords(String words, Pageable pageable);
-
-    @Query(nativeQuery = true, value = "select * from code_samples where match(search_string) against (?1 in boolean mode) > 0")
+    @Query(nativeQuery = true, value = "select * from code_samples where match(search_string) against (?1 in boolean mode)")
     List<Code> findAllBySubstringInBooleanMode(String substring, Pageable pageable);
 
+    @Query(nativeQuery = true, value = "select * from code_samples where match(search_string) against (?1 in natural language mode with query expansion)")
+    List<Code> findAllBySubstringInNaturalLanguageMode(String substring, Pageable pageable);
+
     @Query(nativeQuery = true, value = "select * from code_samples where programming_language=?1 and match(search_string) against (?2 in boolean mode)")
-    List<Code> findAllByLanguageAndSubstring(String language, String substring, Pageable pageable);
+    List<Code> findAllByLanguageAndSubstringInBooleanMode(String language, String substring, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "select * from code_samples where programming_language=?1 and match(search_string) against (?2 in natural language mode with query expansion)")
+    List<Code> findAllByLanguageAndSubstringInNaturalLanguageMode(String language, String substring, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select * from code_samples where match(tag_string) against (?1 in boolean mode) and match(search_string) against (?2 in boolean mode)")
-    List<Code> findAllByTagsAndSubstring(String tags, String substring, Pageable pageable);
+    List<Code> findAllByTagsAndSubstringInBooleanMode(String tags, String substring, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "select * from code_samples where match(tag_string) against (?1 in boolean mode) and match(search_string) against (?2 in natural language mode with query expansion)")
+    List<Code> findAllByTagsAndSubstringInNaturalLanguageMode(String tags, String substring, Pageable pageable);
 }

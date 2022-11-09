@@ -126,21 +126,35 @@ public class CodeRepositoryJpaImpl implements CodeRepository {
     }
 
     @Override
-    public List<Code> findAllBySubstring(String substring, Pageable pageable) {
+    public List<Code> findAllBySubstring(String substring, Pageable pageable, Object... additionalArgs) {
+        Boolean naturalLanguageMode = additionalArgs.length==0?null:(Boolean) additionalArgs[0];
+        if (naturalLanguageMode!=null && naturalLanguageMode){
+            return codeRepositoryHibernate.findAllBySubstringInNaturalLanguageMode(substring,pageable);
+        }
         String searchString = parseSearchString(substring);
         return codeRepositoryHibernate.findAllBySubstringInBooleanMode(searchString, pageable);
     }
 
     @Override
-    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring, Pageable pageable) {
+    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring,
+                                                    Pageable pageable, Object... additionalArgs) {
+        Boolean naturalLanguageMode = additionalArgs.length==0?null:(Boolean) additionalArgs[0];
+        if (naturalLanguageMode!=null && naturalLanguageMode){
+            return codeRepositoryHibernate.findAllByLanguageAndSubstringInNaturalLanguageMode(language.name(),substring,pageable);
+        }
         String searchString = parseSearchString(substring);
-        return codeRepositoryHibernate.findAllByLanguageAndSubstring(language.name(), searchString, pageable);
+        return codeRepositoryHibernate.findAllByLanguageAndSubstringInBooleanMode(language.name(), searchString, pageable);
     }
 
     @Override
-    public List<Code> findAllByTagsAndSubstring(Collection<String> tags, String substring, Pageable pageable) {
+    public List<Code> findAllByTagsAndSubstring(Collection<String> tags, String substring,
+                                                Pageable pageable, Object... additionalArgs) {
         List<String> validTags = parseTags(tags);
+        Boolean naturalLanguageMode = additionalArgs.length==0?null:(Boolean) additionalArgs[0];
+        if (naturalLanguageMode!=null && naturalLanguageMode){
+            return codeRepositoryHibernate.findAllByTagsAndSubstringInNaturalLanguageMode(String.join(" ",validTags),substring,pageable);
+        }
         String searchString = parseSearchString(substring);
-        return codeRepositoryHibernate.findAllByTagsAndSubstring(String.join(" ",validTags), searchString, pageable);
+        return codeRepositoryHibernate.findAllByTagsAndSubstringInBooleanMode(String.join(" ",validTags), searchString, pageable);
     }
 }

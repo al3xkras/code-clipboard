@@ -8,6 +8,7 @@ const tagDelimiterInput=document.getElementById("tag-delim")
 const tagsInput=document.getElementById("tags")
 
 let extendedSearch = document.getElementById("extended-search-toggle").checked
+let naturalLangSearch = document.getElementById("natural-language-search").checked
 let extendedSearchDisable = false;
 let substring = ""
 let tags = ""
@@ -43,6 +44,7 @@ document.getElementById("search-button").addEventListener("click", e=>{
         tags = tagsInput.value
         substringSearch = substringToggle.checked
         tagSearch = tagsToggle.checked
+        naturalLangSearch = document.getElementById("natural-language-search").checked
         pageNumSaved=pageNum
     }
 
@@ -77,7 +79,9 @@ document.getElementById("search-button").addEventListener("click", e=>{
         data.append("page",""+pageNum)
     if (pageSize!=null)
         data.append("size",""+pageSize)
-
+    if (naturalLangSearch){
+        data.append("natural-lang-search",""+naturalLangSearch)
+    }
     const xhr = new XMLHttpRequest();
     xhr.overrideMimeType("application/json");
     xhr.open('POST', '/search', true);

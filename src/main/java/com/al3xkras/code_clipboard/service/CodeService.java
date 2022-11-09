@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -30,16 +31,18 @@ public class CodeService {
     public List<Code> findAllByTags(Collection<String> tags, Pageable pageable){
         return codeRepository.findAllByTags(tags,pageable);
     }
-    public List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language, Pageable pageable){
+    public List<Code> findAllByTagsAndLanguage(Collection<String> tags, ProgrammingLanguage language,
+                                               Pageable pageable){
         return codeRepository.findAllByTagsAndLanguage(tags,language,pageable);
     }
-    public List<Code> findAllBySubstring(String substring, Pageable pageable){
-        return codeRepository.findAllBySubstring(substring,pageable);
+    public List<Code> findAllBySubstring(String substring, Pageable pageable, Object... additionalArgs){
+        return codeRepository.findAllBySubstring(substring,pageable,additionalArgs);
     }
-    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring, Pageable pageable){
-        return codeRepository.findAllByLanguageAndSubstring(language,substring,pageable);
+    public List<Code> findAllByLanguageAndSubstring(ProgrammingLanguage language, String substring, Pageable pageable, Object... additionalArgs){
+        return codeRepository.findAllByLanguageAndSubstring(language,substring,pageable,additionalArgs);
     }
-    public List<Code> findAllByTagsAndSubstring(List<String> tags, String substring, Pageable pageable) {
-        return codeRepository.findAllByTagsAndSubstring(tags,substring,pageable);
+    public List<Code> findAllByTagsAndSubstring(List<String> tags, String substring, Pageable pageable, Object... additionalArgs) {
+        return codeRepository.findAllByTagsAndSubstring(tags,substring,pageable,additionalArgs);
     }
+
 }

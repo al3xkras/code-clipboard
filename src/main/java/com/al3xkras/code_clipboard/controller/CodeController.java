@@ -32,8 +32,10 @@ public class CodeController {
                                                         @RequestParam(name = "substring",required = false)String substring,
                                                         @RequestParam(name = "tags",required = false) String tagString,
                                                         @RequestParam(name = "page", required = false) Integer page,
-                                                        @RequestParam(name = "size", required = false) Integer size) {
+                                                        @RequestParam(name = "size", required = false) Integer size,
+                                                        @RequestParam(name = "natural-lang-search", required = false) Boolean naturalLangSearch) {
 
+        naturalLangSearch = naturalLangSearch!=null && naturalLangSearch;
         if (page==null || size==null){
             page=0;
             size=5;
@@ -65,9 +67,9 @@ public class CodeController {
         if (lang==null){
             if (substring!=null){
                 if (!tags.isEmpty()){
-                    return ResponseEntity.ok(codeService.findAllByTagsAndSubstring(tags,substring, pageable));
+                    return ResponseEntity.ok(codeService.findAllByTagsAndSubstring(tags,substring, pageable, naturalLangSearch));
                 }
-                return ResponseEntity.ok(codeService.findAllBySubstring(substring, pageable));
+                return ResponseEntity.ok(codeService.findAllBySubstring(substring, pageable, naturalLangSearch));
             }
             if (!tags.isEmpty()){
                 return ResponseEntity.ok(codeService.findAllByTags(tags, pageable));
@@ -77,7 +79,7 @@ public class CodeController {
         if (substring==null && !tags.isEmpty()){
             return ResponseEntity.ok(codeService.findAllByTagsAndLanguage(tags, lang, pageable));
         } else if (substring!=null){
-            return ResponseEntity.ok(codeService.findAllByLanguageAndSubstring(lang,substring, pageable));
+            return ResponseEntity.ok(codeService.findAllByLanguageAndSubstring(lang,substring, pageable, naturalLangSearch));
         }
         return ResponseEntity.badRequest().build();
     }
