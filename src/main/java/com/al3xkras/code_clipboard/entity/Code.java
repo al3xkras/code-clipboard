@@ -22,9 +22,9 @@ public class Code implements Serializable {
     @Column(name = "code_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long codeId;
-    @Column(name = "code_string", columnDefinition = "nvarchar(2000)", nullable = false)
+    @Column(name = "code_string", columnDefinition = "nvarchar(3000)", nullable = false)
     private String codeString;
-    @Column(name = "search_string", columnDefinition = "text(2048)",nullable = false)
+    @Column(name = "search_string", columnDefinition = "text(3000)",nullable = false)
     private String searchString;
     @Column(name = "tag_string", columnDefinition = "text(512)", nullable = false)
     private String tagString;
